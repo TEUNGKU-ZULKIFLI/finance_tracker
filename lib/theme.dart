@@ -172,6 +172,7 @@ class AppTheme {
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         foregroundColor: buttonFg(onPrimaryContainer),
+        // ignore: deprecated_member_use
         overlayColor: WidgetStateProperty.all(tertiary.withOpacity(0.12)),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
