@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide NavigationBar;
-import 'package:finance_tracker/widget/navbar.dart';
-import 'package:finance_tracker/widget/appbar.dart';
+import 'package:finance_tracker/widgets/navbar.dart';
+import 'package:finance_tracker/widgets/appbar.dart';
 
 // Import semua halaman
 import 'home_page.dart';

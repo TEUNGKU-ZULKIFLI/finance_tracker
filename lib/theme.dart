@@ -1,51 +1,95 @@
 import 'package:flutter/material.dart';
 
+/// Kumpulan tema, palet warna, dan helper untuk seluruh aplikasi.
+/// Gunakan AppTheme.lightScheme / AppTheme.darkScheme untuk akses ColorScheme.
+/// Gunakan AppTheme.neonWrap untuk efek glow universal.
+/// Semua widget sebaiknya ambil warna dari Theme.of(context).colorScheme.
+
 class AppTheme {
-  // 🎨 Palette — Purple / Magenta Neon
-  static const Color primary = Color(0xFF8E24AA); // Purple
+  /// Helper warna background NavigationBar
+  /// Helper warna background NavigationBar
+  static Color navBarBg(ColorScheme scheme) => scheme.surfaceContainerHighest;
+
+  /// Helper warna icon NavigationBar
+  /// Helper warna icon NavigationBar
+  static Color navBarIcon(ColorScheme scheme, {bool selected = false}) =>
+      selected ? scheme.primary : scheme.onSurfaceVariant.withOpacity(0.7);
+
+  /// Helper warna text NavigationBar
+  /// Helper warna text NavigationBar
+  static Color navBarText(ColorScheme scheme, {bool selected = false}) =>
+      selected ? scheme.primary : scheme.onSurfaceVariant.withOpacity(0.8);
+
+  /// Getter ColorScheme untuk akses langsung
+  static ColorScheme get lightScheme => lightTheme.colorScheme;
+  static ColorScheme get darkScheme => darkTheme.colorScheme;
+  // 🎨 PALETTE MATERIAL 3 — Light & Dark Mapping
+  // Semua warna di bawah ini punya padanan di dua mode agar konsisten
+
+  // PRIMARY
+  static const Color primary = Color(0xFF8E24AA); // Light & Dark
   static const Color onPrimary = Colors.white;
-  static const Color primaryContainer = Color(0xFFE1BEE7);
-  static const Color onPrimaryContainer = Color(0xFF4A148C);
+  static const Color primaryContainer = Color(0xFFE1BEE7); // Light
+  static const Color onPrimaryContainer = Color(0xFF4A148C); // Light
+  static const Color primaryContainerDark = Color(0xFF4A148C); // Dark
+  static const Color onPrimaryContainerDark = Colors.white; // Dark
 
-  static const Color secondary = Color(0xFF0288D1); // Sky Blue (aksen)
+  // SECONDARY
+  static const Color secondary = Color(0xFF0288D1);
   static const Color onSecondary = Colors.white;
-  static const Color secondaryContainer = Color(0xFFB3E5FC);
-  static const Color onSecondaryContainer = Color(0xFF01579B);
+  static const Color secondaryContainer = Color(0xFFB3E5FC); // Light
+  static const Color onSecondaryContainer = Color(0xFF01579B); // Light
+  static const Color secondaryContainerDark = Color(0xFF01579B); // Dark
+  static const Color onSecondaryContainerDark = Colors.white; // Dark
 
-  static const Color tertiary = Color(0xFFFF00FF); // Neon Magenta
+  // TERTIARY
+  static const Color tertiary = Color(0xFFFF00FF);
   static const Color onTertiary = Colors.white;
-  static const Color tertiaryContainer = Color(0xFFFFB3FF); // Soft Magenta
-  static const Color onTertiaryContainer = Color(0xFF660066); // Deep Magenta
+  static const Color tertiaryContainer = Color(0xFFFFB3FF); // Light
+  static const Color onTertiaryContainer = Color(0xFF660066); // Light
+  static const Color tertiaryContainerDark = Color(0xFF3A003A); // Dark
+  static const Color onTertiaryContainerDark = Colors.white; // Dark
 
+  // ERROR
   static const Color error = Color(0xFFCF6679);
   static const Color onError = Colors.white;
-  static const Color errorContainer = Color(0xFFB00020);
-  static const Color onErrorContainer = Colors.white;
+  static const Color errorContainer = Color(0xFFB00020); // Light
+  static const Color onErrorContainer = Colors.white; // Light
+  static const Color errorContainerDark = Color(0xFF8C1D1D); // Dark
+  static const Color onErrorContainerDark = Colors.white; // Dark
 
-  static const Color surface = Colors.white;
-  static const Color onSurface = Colors.black87;
-  static const Color onSurfaceVariant = Color(0xFF5C5C5C);
-  static const Color surfaceContainer = Color(0xFFF5F5F5);
+  // SURFACE & BACKGROUND
+  static const Color surface = Color(0xFFFFFFFF); // Light
+  static const Color onSurface = Color(0xFF1A1A1A); // Light
+  static const Color surfaceContainerHighest = Color(0xFFF5F5F5); // Light
+  static const Color onSurfaceVariant = Color(0xFF5C5C5C); // Light
+  static const Color surfaceDark = Color(0xFF121212); // Dark
+  static const Color onSurfaceDark = Color(0xFFFFFFFF); // Dark
+  static const Color surfaceContainerHighestDark = Color(0xFF232323); // Dark
+  static const Color onSurfaceVariantDark = Color(0xFFB0BEC5); // Dark
+
+  // INVERSE
   static const Color inverseSurface = Color(0xFF303030);
   static const Color inverseOnSurface = Colors.white;
   static const Color inversePrimary = Color(0xFFD1C4E9);
 
+  // OUTLINE
   static const Color outline = Color(0xFFB0BEC5);
   static const Color outlineVariant = Color(0xFF90A4AE);
 
+  // FIXED
   static const Color primaryFixed = primary;
   static const Color secondaryFixed = secondary;
   static const Color tertiaryFixed = tertiary;
-
   static const Color primaryFixedDim = Color(0xFF7B1FA2);
   static const Color secondaryFixedDim = Color(0xFF0277BD);
-  static const Color tertiaryFixedDim = Color(0xFFCC00CC); // Dim Neon Magenta
-
+  static const Color tertiaryFixedDim = Color(0xFFCC00CC);
   static const Color onFixed = Colors.white;
   static const Color onFixedVariant = Colors.black87;
 
+  // SURFACE VARIANT
   static const Color surfaceDim = Color(0xFFEEEEEE);
-  static const Color surfaceBright = Colors.white;
+  static const Color surfaceBright = Color(0xFFFFFFFF);
 
   // Helper state button
   static WidgetStateProperty<Color?> buttonBg(ColorScheme colorScheme) =>
@@ -85,7 +129,7 @@ class AppTheme {
       onErrorContainer: onErrorContainer,
       surface: surface,
       onSurface: onSurface,
-      surfaceContainerHighest: surfaceContainer,
+      surfaceContainerHighest: surfaceContainerHighest,
       onSurfaceVariant: onSurfaceVariant,
       outline: outline,
       outlineVariant: outlineVariant,
@@ -108,7 +152,7 @@ class AppTheme {
     ),
 
     navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: surfaceContainer,
+  backgroundColor: surfaceContainerHighest,
       indicatorColor: tertiary.withAlpha((0.2 * 255).toInt()),
       labelTextStyle: WidgetStateProperty.all(
         const TextStyle(fontWeight: FontWeight.w600),
@@ -199,24 +243,24 @@ class AppTheme {
       brightness: Brightness.dark,
       primary: primaryFixedDim,
       onPrimary: onPrimary,
-      primaryContainer: Color(0xFF4A148C),
-      onPrimaryContainer: Colors.white,
+      primaryContainer: primaryContainerDark,
+      onPrimaryContainer: onPrimaryContainerDark,
       secondary: secondaryFixedDim,
       onSecondary: onSecondary,
-      secondaryContainer: Color(0xFF01579B),
-      onSecondaryContainer: Colors.white,
+      secondaryContainer: secondaryContainerDark,
+      onSecondaryContainer: onSecondaryContainerDark,
       tertiary: tertiaryFixedDim,
       onTertiary: onTertiary,
-      tertiaryContainer: Color(0xFF3A003A),
-      onTertiaryContainer: Colors.white,
+      tertiaryContainer: tertiaryContainerDark,
+      onTertiaryContainer: onTertiaryContainerDark,
       error: error,
       onError: onError,
-      errorContainer: Color(0xFF8C1D1D),
-      onErrorContainer: Colors.white,
-      surface: Color(0xFF121212),
-      onSurface: Colors.white,
-      surfaceContainerHighest: Color(0xFF2C2C2C),
-      onSurfaceVariant: Colors.white70,
+      errorContainer: errorContainerDark,
+      onErrorContainer: onErrorContainerDark,
+      surface: surfaceDark,
+      onSurface: onSurfaceDark,
+      surfaceContainerHighest: surfaceContainerHighestDark,
+      onSurfaceVariant: onSurfaceVariantDark,
       outline: outlineVariant,
       outlineVariant: Color(0xFF444444),
       shadow: Colors.black54,
