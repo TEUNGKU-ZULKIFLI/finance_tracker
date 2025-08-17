@@ -9,17 +9,17 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return AppBar(
-      backgroundColor: colorScheme.surfaceContainerHighest,
-      foregroundColor: colorScheme.onSurface,
+      backgroundColor: colorScheme.primary,
+      foregroundColor: colorScheme.onPrimary,
       title: Text(
         'APOK Finance Tracker',
-        style: TextStyle(color: colorScheme.onSurface),
+        style: TextStyle(color: colorScheme.onPrimary),
       ),
       centerTitle: true,
       elevation: 6,
       actions: [
         IconButton(
-          icon: Icon(Icons.info_outline_rounded, color: colorScheme.onSurfaceVariant),
+          icon: Icon(Icons.info_outline_rounded, color: colorScheme.onPrimary),
           onPressed: () {
             // TODO: Implement info action
           },

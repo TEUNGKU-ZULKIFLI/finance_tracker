@@ -39,7 +39,7 @@ class _InputPageState extends State<InputPage> {
                 ),
               );
             },
-            child: Text('Tampilkan Snackbar', style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)),
+            child: Text('Tampilkan Snackbar', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
           ),
         ],
       ),
