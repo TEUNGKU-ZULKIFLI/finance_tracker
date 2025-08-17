@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Finance Tracker',
-      theme: MaterialTheme(const TextTheme()).dark(),
+      theme: MaterialTheme(const TextTheme()).light(),
       // darkTheme: MaterialTheme(const TextTheme()).dark(),
       home: const MainPage(),
       debugShowCheckedModeBanner: false,
