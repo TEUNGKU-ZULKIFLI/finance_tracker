@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:finance_tracker/widgets/cards/card_credits.dart';
+
 class CardPage extends StatefulWidget {
   const CardPage({super.key});
 
@@ -15,22 +16,50 @@ class _CardPageState extends State<CardPage> {
     final cardList = [
       CardCredits(
         namaRek: "APOK GACOR",
-        noRek: "1234567890",
-        logoAsset: "assets/bank/Bank_Aceh_Syariah.png",
+        noRek: "0987654321",
+        logoAsset: "assets/bank/Bank_Syariah_Indonesia.png",
         onEdit: () {},
         onDelete: () {},
       ),
       CardCredits(
-        namaRek: "MANDIRI",
-        noRek: "9876543210",
+        namaRek: "APOK GACOR",
+        noRek: "1234567890",
+        logoAsset: "assets/bank/Bank_Tabungan_Negara_Syariah.png",
+        onEdit: () {},
+        onDelete: () {},
+      ),
+      CardCredits(
+        namaRek: "APOK GACOR",
+        noRek: "1122334455",
         logoAsset: "assets/bank/Bank_Mandiri.png",
         onEdit: () {},
         onDelete: () {},
       ),
       CardCredits(
-        namaRek: "BNI",
+        namaRek: "APOK GACOR",
+        noRek: "1234567890",
+        logoAsset: "assets/bank/Bank_Tabungan_Negara.png",
+        onEdit: () {},
+        onDelete: () {},
+      ),
+      CardCredits(
+        namaRek: "APOK GACOR",
         noRek: "1122334455",
         logoAsset: "assets/bank/Bank_Negara_Indonesia.png",
+        onEdit: () {},
+        onDelete: () {},
+      ),
+      CardCredits(
+        namaRek: "APOK GACOR",
+        noRek: "1234567890",
+        logoAsset: "assets/bank/Bank_Rakyat_Indonesia.png",
+        onEdit: () {},
+        onDelete: () {},
+      ),
+      CardCredits(
+        namaRek: "APOK GACOR",
+        noRek: "1234567890",
+        logoAsset: "assets/bank/Bank_Aceh_Syariah.png",
         onEdit: () {},
         onDelete: () {},
       ),
@@ -39,30 +68,19 @@ class _CardPageState extends State<CardPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 32),
       child: SizedBox(
-        height: 280,
+        height: 300,
         child: PageView.builder(
           controller: _pageController,
           itemCount: cardList.length,
+          onPageChanged: (index) {
+            // Optional: bisa tambahkan logika jika ingin
+          },
           itemBuilder: (context, index) {
-            return AnimatedBuilder(
-              animation: _pageController,
-              builder: (context, child) {
-                double value = 1.0;
-                if (_pageController.position.haveDimensions) {
-                  value = ((_pageController.page ?? _pageController.initialPage).toDouble()) - index.toDouble();
-                  value = (1 - (value.abs() * 0.18)).clamp(0.82, 1.0);
-                }
-                return Transform.scale(
-                  scale: value,
-                  child: Opacity(
-                    opacity: value,
-                    child: Transform.translate(
-                      offset: Offset(0, (1 - value) * 32),
-                      child: cardList[index],
-                    ),
-                  ),
-                );
-              },
+            // Untuk efek looping
+            final realIndex = index % cardList.length;
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: cardList[realIndex],
             );
           },
         ),
