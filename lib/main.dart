@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Finance Tracker',
       theme: MaterialTheme(const TextTheme()).light(),
-      // darkTheme: MaterialTheme(const TextTheme()).dark(),
+      darkTheme: MaterialTheme(const TextTheme()).dark(),
+      themeMode: ThemeMode.system,
       home: const MainPage(),
       debugShowCheckedModeBanner: false,
     );
