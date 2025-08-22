@@ -33,6 +33,7 @@ class CardCredits extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
+              // ignore: deprecated_member_use
               color: colorScheme.shadow.withOpacity(0.10),
               blurRadius: 18,
               offset: const Offset(0, 8),
@@ -40,7 +41,9 @@ class CardCredits extends StatelessWidget {
           ],
           gradient: LinearGradient(
             colors: [
+              // ignore: deprecated_member_use
               colorScheme.primary.withOpacity(0.18),
+              // ignore: deprecated_member_use
               colorScheme.surface.withOpacity(0.98),
             ],
             begin: Alignment.topLeft,
@@ -57,6 +60,7 @@ class CardCredits extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16), // Lebih bulat
+                    // ignore: deprecated_member_use
                     color: colorScheme.surfaceContainerHighest.withOpacity(0.85),
                   ),
                   padding: const EdgeInsets.all(10), // Lebih besar
@@ -129,6 +133,7 @@ class CardCredits extends StatelessWidget {
             const Spacer(),
             Divider(
               thickness: 1.2,
+              // ignore: deprecated_member_use
               color: colorScheme.outline.withOpacity(0.3),
             ),
             const SizedBox(height: 8),

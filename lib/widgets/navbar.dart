@@ -25,6 +25,7 @@ class NavigationBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: colorScheme.onSurface.withOpacity(0.08),
             blurRadius: 16,
             offset: const Offset(0, 4),
@@ -67,7 +68,9 @@ class NavigationBar extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: isSelected
+                      // ignore: deprecated_member_use
                       ? colorScheme.primary.withOpacity(0.28)
+                      // ignore: deprecated_member_use
                       : colorScheme.primary.withOpacity(0.18),
                   blurRadius: isSelected ? 18 : 12,
                   offset: const Offset(0, 2),
@@ -106,6 +109,7 @@ class NavigationBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
+                    // ignore: deprecated_member_use
                     color: colorScheme.primary.withOpacity(0.22),
                     blurRadius: 12,
                     offset: const Offset(0, 2),
