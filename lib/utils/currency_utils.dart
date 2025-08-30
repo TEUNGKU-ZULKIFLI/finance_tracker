@@ -52,3 +52,5 @@ class CurrencyInputFormatter extends TextInputFormatter {
 }
 
 // Untuk penambahan mata uang lain, cukup tambahkan di sini dan update mapping
+
+final CurrencyInfo defaultCurrencyInfo = CurrencyInfo('IDR', 'Rp. ', 'id_ID');
