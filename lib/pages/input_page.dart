@@ -1,4 +1,6 @@
+import 'package:finance_tracker/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:finance_tracker/widgets/snackbar.dart';
 import 'package:finance_tracker/services/db_service.dart';
 import 'package:finance_tracker/models/date_model.dart';
 import 'package:finance_tracker/models/expense_model.dart';
@@ -14,6 +16,21 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+  OverlayEntry? _snackbarEntry;
+
+  void _showCustomSnackbar(String message, SnackbarType type) {
+    _snackbarEntry?.remove();
+    _snackbarEntry = OverlayEntry(
+      builder: (ctx) => Positioned(
+        bottom: 80,
+        left: 0,
+        right: 0,
+        child: Snackbar(message: message, type: type),
+      ),
+    );
+    Overlay.of(context).insert(_snackbarEntry!);
+    Future.delayed(const Duration(seconds: 3), () => _snackbarEntry?.remove());
+  }
   int _step = 0;
   final _dateController = TextEditingController();
   final Map<String, TextEditingController> _expenseControllers = {
@@ -45,14 +62,23 @@ class _InputPageState extends State<InputPage> {
     // Step 1: Input Date
     if (_step == 1) {
       return Card(
-        elevation: 6,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: Theme.of(context).colorScheme.surface,
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(28),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.calendar_today, color: Theme.of(context).colorScheme.primary, size: 22),
+                  const SizedBox(width: 8),
+                  Text('DATE', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary, letterSpacing: 2)),
+                ],
+              ),
+              const SizedBox(height: 20),
               TextField(
                 controller: _dateController,
                 decoration: InputDecoration(
@@ -114,14 +140,23 @@ class _InputPageState extends State<InputPage> {
     // Step 2: Input Expense
     if (_step == 2) {
       return Card(
-        elevation: 6,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: Theme.of(context).colorScheme.surface,
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(28),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.arrow_circle_down_rounded, color: Theme.of(context).colorScheme.expense, size: 22),
+                  const SizedBox(width: 8),
+                  Text('EXPENSE', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.expense, letterSpacing: 2)),
+                ],
+              ),
+              const SizedBox(height: 20),
               ..._expenseControllers.entries.map((e) => Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: TextField(
@@ -175,14 +210,23 @@ class _InputPageState extends State<InputPage> {
     // Step 3: Input Income
     if (_step == 3) {
       return Card(
-        elevation: 6,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: Theme.of(context).colorScheme.surface,
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(28),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.arrow_circle_up_rounded, color: Theme.of(context).colorScheme.income, size: 22),
+                  const SizedBox(width: 8),
+                  Text('INCOME', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.income, letterSpacing: 2)),
+                ],
+              ),
+              const SizedBox(height: 20),
               TextField(
                 controller: _incomeControllers['Gaji'],
                 decoration: InputDecoration(
@@ -243,7 +287,7 @@ class _InputPageState extends State<InputPage> {
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         foregroundColor: Colors.white,
                       ),
-                      child: const Text('SIMPAN'),
+                      child: const Text('SAVE'),
                     ),
                   ),
                 ],
@@ -333,20 +377,10 @@ class _InputPageState extends State<InputPage> {
       );
       await DbService.insertEquity(equityModel);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Data berhasil disimpan!'),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        ),
-      );
+  _showCustomSnackbar('Data berhasil disimpan!', SnackbarType.success);
       _reset();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Gagal menyimpan data: $e'),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
+      _showCustomSnackbar('Gagal menyimpan data: $e', SnackbarType.error);
     }
   }
 

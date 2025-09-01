@@ -139,10 +139,12 @@ class DbService {
     await db.delete('income');
     await db.delete('saldo');
     await db.delete('dates');
+    await db.delete('equity');
     // Reset auto-increment id (sqlite_sequence) untuk semua tabel
     await db.rawDelete("DELETE FROM sqlite_sequence WHERE name='expenses'");
     await db.rawDelete("DELETE FROM sqlite_sequence WHERE name='income'");
     await db.rawDelete("DELETE FROM sqlite_sequence WHERE name='saldo'");
     await db.rawDelete("DELETE FROM sqlite_sequence WHERE name='dates'");
+    await db.rawDelete("DELETE FROM sqlite_sequence WHERE name='equity'");
   }
 }

@@ -1,5 +1,11 @@
 import "package:flutter/material.dart";
 
+// Custom color extension for expense and income
+extension CustomColors on ColorScheme {
+  Color get expense => const Color(0xfff36b7f); // Soft red
+  Color get income => const Color(0xff4caf50); // Soft green
+}
+
 class MaterialTheme {
   final TextTheme textTheme;
 
