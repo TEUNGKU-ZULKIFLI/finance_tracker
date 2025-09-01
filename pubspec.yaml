@@ -69,6 +69,7 @@ flutter:
     - assets/bank/Bank_Syariah_Indonesia.png
     - assets/bank/Bank_Tabungan_Negara_Syariah.png
     - assets/bank/Bank_Tabungan_Negara.png
+    - assets/dev/teungku.JPG
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
