@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'dart:io';
 import '../models/date_model.dart';
 import '../models/expense_model.dart';
 import '../models/income_model.dart';
@@ -17,6 +18,22 @@ class DbService {
   static Future<Database> _initDb() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'finance_tracker.db');
+
+    // Cek apakah file database sudah ada
+    final dbFile = File(path);
+    if (await dbFile.exists()) {
+      // Buka database sementara untuk cek struktur
+      final tempDb = await openDatabase(path);
+      final res = await tempDb.rawQuery("PRAGMA table_info(income);");
+      final hasCurrency = res.any((col) => col['name'] == 'currency');
+      await tempDb.close();
+      // Jika kolom currency belum ada, hapus database
+      if (!hasCurrency) {
+        await dbFile.delete();
+      }
+    }
+
+    // Buka database (akan dibuat ulang jika baru dihapus)
     return await openDatabase(
       path,
       version: 1,
@@ -45,6 +62,7 @@ class DbService {
             date_id INTEGER NOT NULL,
             gaji INTEGER,
             lainnya INTEGER,
+            currency TEXT,
             FOREIGN KEY(date_id) REFERENCES dates(id) ON DELETE CASCADE
           );
         ''');
