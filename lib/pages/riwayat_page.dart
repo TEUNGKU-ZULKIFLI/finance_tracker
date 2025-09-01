@@ -13,6 +13,7 @@ class _RiwayatPageState extends State<RiwayatPage> {
   List<Map<String, dynamic>> expenses = [];
   List<Map<String, dynamic>> income = [];
   List<Map<String, dynamic>> saldo = [];
+  List<Map<String, dynamic>> equity = [];
   bool loading = true;
 
   @override
@@ -27,6 +28,7 @@ class _RiwayatPageState extends State<RiwayatPage> {
     expenses = await db.query('expenses');
     income = await db.query('income');
     saldo = await db.query('saldo');
+  equity = await db.query('equity');
     setState(() {
       loading = false;
     });
@@ -54,6 +56,11 @@ class _RiwayatPageState extends State<RiwayatPage> {
                     const Text('Tabel income', style: TextStyle(fontWeight: FontWeight.bold)),
                     ...income.map((i) => Text(
                       'id: ${i['id']}, date_id: ${i['date_id']}, gaji: ${i['gaji']}, lainnya: ${i['lainnya']}, currency: ${i['currency']}'
+                    )).toList(),
+                    const SizedBox(height: 16),
+                    const Text('Tabel equity', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ...equity.map((e) => Text(
+                      'id: ${e['id']}, date_id: ${e['date_id']}, expense_estimation: ${e['expense_estimation']}, income_estimation: ${e['income_estimation']}, estimation_saldo: ${e['estimation_saldo']}'
                     )).toList(),
                     const SizedBox(height: 16),
                     const Text('Tabel saldo', style: TextStyle(fontWeight: FontWeight.bold)),

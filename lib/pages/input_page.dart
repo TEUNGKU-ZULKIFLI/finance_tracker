@@ -4,6 +4,7 @@ import 'package:finance_tracker/models/date_model.dart';
 import 'package:finance_tracker/models/expense_model.dart';
 import 'package:finance_tracker/models/income_model.dart';
 import 'package:finance_tracker/models/saldo_model.dart';
+import 'package:finance_tracker/models/equity_model.dart';
 
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
@@ -322,6 +323,15 @@ class _InputPageState extends State<InputPage> {
       final totalExpense = expenseModel.pagi + expenseModel.siang + expenseModel.sore + expenseModel.malam + expenseModel.bensin;
       final saldoModel = SaldoModel(dateId: dateId, saldo: totalIncome - totalExpense);
       await DbService.insertSaldo(saldoModel);
+
+      // Insert equity
+      final equityModel = EquityModel(
+        dateId: dateId,
+        expenseEstimation: totalExpense,
+        incomeEstimation: totalIncome,
+        estimationSaldo: totalIncome - totalExpense,
+      );
+      await DbService.insertEquity(equityModel);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

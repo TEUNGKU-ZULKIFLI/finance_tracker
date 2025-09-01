@@ -5,6 +5,7 @@ import '../models/date_model.dart';
 import '../models/expense_model.dart';
 import '../models/income_model.dart';
 import '../models/saldo_model.dart';
+import '../models/equity_model.dart';
 
 class DbService {
   static Database? _db;
@@ -24,11 +25,13 @@ class DbService {
     if (await dbFile.exists()) {
       // Buka database sementara untuk cek struktur
       final tempDb = await openDatabase(path);
-      final res = await tempDb.rawQuery("PRAGMA table_info(income);");
-      final hasCurrency = res.any((col) => col['name'] == 'currency');
+      final incomeRes = await tempDb.rawQuery("PRAGMA table_info(income);");
+      final hasCurrency = incomeRes.any((col) => col['name'] == 'currency');
+      final equityRes = await tempDb.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='equity';");
+      final hasEquity = equityRes.isNotEmpty;
       await tempDb.close();
-      // Jika kolom currency belum ada, hapus database
-      if (!hasCurrency) {
+      // Jika kolom currency belum ada atau tabel equity belum ada, hapus database
+      if (!hasCurrency || !hasEquity) {
         await dbFile.delete();
       }
     }
@@ -74,8 +77,23 @@ class DbService {
             FOREIGN KEY(date_id) REFERENCES dates(id) ON DELETE CASCADE
           );
         ''');
+          await db.execute('''
+            CREATE TABLE equity (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              date_id INTEGER NOT NULL,
+              expense_estimation INTEGER,
+              income_estimation INTEGER,
+              estimation_saldo INTEGER,
+              FOREIGN KEY(date_id) REFERENCES dates(id) ON DELETE CASCADE
+            );
+          ''');
       },
     );
+  }
+  // Insert Equity
+  static Future<int> insertEquity(EquityModel equity) async {
+    final db = await database;
+    return await db.insert('equity', equity.toMap());
   }
 
   // Insert functions
