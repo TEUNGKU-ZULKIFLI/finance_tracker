@@ -38,10 +38,10 @@ class NavigationBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildNavItem(context, Icons.home, "Home", 0),
-            _buildNavItem(context, Icons.show_chart, "Trade", 1),
+            _buildNavItem(context, Icons.bar_chart_rounded, "Chart", 1),
             _buildFabItem(context, fabSize, currentIndex == 2),
             _buildNavItem(context, Icons.credit_card, "Card", 3),
-            _buildNavItem(context, Icons.history, "Riwayat", 4),
+            _buildNavItem(context, Icons.history, "History", 4),
           ],
         ),
       ),

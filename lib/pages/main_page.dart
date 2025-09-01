@@ -4,10 +4,10 @@ import 'package:finance_tracker/widgets/appbar.dart';
 
 // Import semua halaman
 import 'home_page.dart';
-import 'trade_page.dart';
+import 'chart_page.dart';
 import 'input_page.dart';
 import 'card_page.dart';
-import 'riwayat_page.dart';
+import 'history_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -21,10 +21,10 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> _pages = const [
     HomePage(),
-    TradePage(),
+    ChartPage(),
     InputPage(),
     CardPage(),
-    RiwayatPage(),
+    HistoryPage(),
   ];
 
   void _onItemTapped(int index) {

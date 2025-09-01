@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class TradePage extends StatefulWidget {
-  const TradePage({super.key});
+class ChartPage extends StatefulWidget {
+  const ChartPage({super.key});
 
   @override
-  State<TradePage> createState() => _TradePageState();
+  State<ChartPage> createState() => _ChartPageState();
 }
 
-class _TradePageState extends State<TradePage> {
+class _ChartPageState extends State<ChartPage> {
   @override
   Widget build(BuildContext context) {
     return Placeholder(

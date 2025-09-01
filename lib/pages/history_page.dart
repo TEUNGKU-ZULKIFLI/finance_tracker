@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:finance_tracker/services/db_service.dart';
 
-class RiwayatPage extends StatefulWidget {
-  const RiwayatPage({super.key});
+class HistoryPage extends StatefulWidget {
+  const HistoryPage({super.key});
 
   @override
-  State<RiwayatPage> createState() => _RiwayatPageState();
+  State<HistoryPage> createState() => _HistoryPageState();
 }
 
-class _RiwayatPageState extends State<RiwayatPage> {
+class _HistoryPageState extends State<HistoryPage> {
   List<Map<String, dynamic>> dates = [];
   List<Map<String, dynamic>> expenses = [];
   List<Map<String, dynamic>> income = [];
