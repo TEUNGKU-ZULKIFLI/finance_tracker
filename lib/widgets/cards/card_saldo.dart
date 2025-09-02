@@ -23,9 +23,15 @@ class _CardSaldoState extends State<CardSaldo> {
 
   Future<void> _loadTotalEquity() async {
     final db = await DbService.database;
-    final expenseSumRes = await db.rawQuery('SELECT SUM(expense_estimation) as total FROM equity');
-    final incomeSumRes = await db.rawQuery('SELECT SUM(income_estimation) as total FROM equity');
-    final saldoSumRes = await db.rawQuery('SELECT SUM(estimation_saldo) as total FROM equity');
+    final expenseSumRes = await db.rawQuery(
+      'SELECT SUM(expense_estimation) as total FROM equity',
+    );
+    final incomeSumRes = await db.rawQuery(
+      'SELECT SUM(income_estimation) as total FROM equity',
+    );
+    final saldoSumRes = await db.rawQuery(
+      'SELECT SUM(estimation_saldo) as total FROM equity',
+    );
 
     expenseEstimation = (expenseSumRes.first['total'] as int?) ?? 0;
     incomeEstimation = (incomeSumRes.first['total'] as int?) ?? 0;
@@ -58,17 +64,21 @@ class _CardSaldoState extends State<CardSaldo> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 28),
+        padding: const EdgeInsets.symmetric(horizontal: 38, vertical: 28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.account_balance_wallet, color: colorScheme.primary, size: 28),
+                Icon(
+                  Icons.account_balance_wallet,
+                  color: colorScheme.primary,
+                  size: 50,
+                ),
                 const SizedBox(width: 8),
                 Text(
-                  'SALDO',
+                  'BALANCE',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -103,64 +113,92 @@ class _CardSaldoState extends State<CardSaldo> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: colorScheme.expense.withOpacity(0.12),
+                      color: colorScheme.expense.withOpacity(0.10),
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: colorScheme.expense.withOpacity(0.18),
-                          blurRadius: 12,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
                     ),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.arrow_circle_down_rounded, color: colorScheme.expense, size: 20),
+                            Icon(
+                              Icons.arrow_circle_down_rounded,
+                              color: colorScheme.expense,
+                              size: 20,
+                            ),
                             const SizedBox(width: 4),
-                            Text('EXPENSE', style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.expense)),
+                            Text(
+                              'EXPENSE',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: colorScheme.expense,
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 4),
                         Text(
                           expenseEstimation.toString(),
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: colorScheme.expense),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.expense,
+                            shadows: [
+                              Shadow(
+                                color: Colors.redAccent.withOpacity(0.55),
+                                blurRadius: 16,
+                                offset: Offset(0, 0),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 24),
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: colorScheme.income.withOpacity(0.12),
+                      color: colorScheme.income.withOpacity(0.10),
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: colorScheme.income.withOpacity(0.18),
-                          blurRadius: 12,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
                     ),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.arrow_circle_up_rounded, color: colorScheme.income, size: 20),
+                            Icon(
+                              Icons.arrow_circle_up_rounded,
+                              color: colorScheme.income,
+                              size: 20,
+                            ),
                             const SizedBox(width: 4),
-                            Text('INCOME', style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.income)),
+                            Text(
+                              'INCOME',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: colorScheme.income,
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 4),
                         Text(
                           incomeEstimation.toString(),
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: colorScheme.income),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.income,
+                            shadows: [
+                              Shadow(
+                                color: Colors.greenAccent.withOpacity(0.55),
+                                blurRadius: 16,
+                                offset: Offset(0, 0),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
