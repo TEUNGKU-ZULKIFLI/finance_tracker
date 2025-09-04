@@ -3,14 +3,14 @@ class EquityModel {
   final int dateId;
   final int expenseEstimation;
   final int incomeEstimation;
-  final int estimationSaldo;
+  final int estimationBalance;
 
   EquityModel({
     this.id,
     required this.dateId,
     required this.expenseEstimation,
     required this.incomeEstimation,
-    required this.estimationSaldo,
+    required this.estimationBalance,
   });
 
   factory EquityModel.fromMap(Map<String, dynamic> map) => EquityModel(
@@ -18,7 +18,7 @@ class EquityModel {
     dateId: map['date_id'],
     expenseEstimation: map['expense_estimation'],
     incomeEstimation: map['income_estimation'],
-    estimationSaldo: map['estimation_saldo'],
+    estimationBalance: map['estimation_balance'],
   );
 
   Map<String, dynamic> toMap() => {
@@ -26,6 +26,6 @@ class EquityModel {
     'date_id': dateId,
     'expense_estimation': expenseEstimation,
     'income_estimation': incomeEstimation,
-    'estimation_saldo': estimationSaldo,
+    'estimation_balance': estimationBalance,
   };
 }

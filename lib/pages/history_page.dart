@@ -12,7 +12,7 @@ class _HistoryPageState extends State<HistoryPage> {
   List<Map<String, dynamic>> dates = [];
   List<Map<String, dynamic>> expenses = [];
   List<Map<String, dynamic>> income = [];
-  List<Map<String, dynamic>> saldo = [];
+  List<Map<String, dynamic>> balance = [];
   List<Map<String, dynamic>> equity = [];
   bool loading = true;
 
@@ -27,7 +27,7 @@ class _HistoryPageState extends State<HistoryPage> {
     dates = await db.query('dates', orderBy: 'date DESC');
     expenses = await db.query('expenses');
     income = await db.query('income');
-    saldo = await db.query('saldo');
+    balance = await db.query('balance');
   equity = await db.query('equity');
     setState(() {
       loading = false;
@@ -60,11 +60,11 @@ class _HistoryPageState extends State<HistoryPage> {
                     const SizedBox(height: 16),
                     const Text('Tabel equity', style: TextStyle(fontWeight: FontWeight.bold)),
                     ...equity.map((e) => Text(
-                      'id: ${e['id']}, date_id: ${e['date_id']}, expense_estimation: ${e['expense_estimation']}, income_estimation: ${e['income_estimation']}, estimation_saldo: ${e['estimation_saldo']}'
+                      'id: ${e['id']}, date_id: ${e['date_id']}, expense_estimation: ${e['expense_estimation']}, income_estimation: ${e['income_estimation']}, estimation_balance: ${e['estimation_balance']}'
                     )).toList(),
                     const SizedBox(height: 16),
-                    const Text('Tabel saldo', style: TextStyle(fontWeight: FontWeight.bold)),
-                    ...saldo.map((s) => Text('id: ${s['id']}, date_id: ${s['date_id']}, saldo: ${s['saldo']}')).toList(),
+                    const Text('Tabel balance', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ...balance.map((s) => Text('id: ${s['id']}, date_id: ${s['date_id']}, balance: ${s['balance']}')).toList(),
                     const SizedBox(height: 32),
                     Center(
                       child: ElevatedButton.icon(

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:finance_tracker/services/db_service.dart';
 import 'package:finance_tracker/theme.dart';
 
-class CardSaldo extends StatefulWidget {
-  const CardSaldo({super.key});
+class CardBalance extends StatefulWidget {
+  const CardBalance({super.key});
 
   @override
-  State<CardSaldo> createState() => _CardSaldoState();
+  State<CardBalance> createState() => _CardBalanceState();
 }
 
-class _CardSaldoState extends State<CardSaldo> {
-  int estimationSaldo = 0;
+class _CardBalanceState extends State<CardBalance> {
+  int estimationBalance = 0;
   int expenseEstimation = 0;
   int incomeEstimation = 0;
   bool loading = true;
@@ -29,13 +29,13 @@ class _CardSaldoState extends State<CardSaldo> {
     final incomeSumRes = await db.rawQuery(
       'SELECT SUM(income_estimation) as total FROM equity',
     );
-    final saldoSumRes = await db.rawQuery(
-      'SELECT SUM(estimation_saldo) as total FROM equity',
+    final balanceSumRes = await db.rawQuery(
+      'SELECT SUM(estimation_balance) as total FROM equity',
     );
 
     expenseEstimation = (expenseSumRes.first['total'] as int?) ?? 0;
     incomeEstimation = (incomeSumRes.first['total'] as int?) ?? 0;
-    estimationSaldo = (saldoSumRes.first['total'] as int?) ?? 0;
+    estimationBalance = (balanceSumRes.first['total'] as int?) ?? 0;
 
     setState(() => loading = false);
   }
@@ -90,7 +90,7 @@ class _CardSaldoState extends State<CardSaldo> {
             ),
             const SizedBox(height: 8),
             Text(
-              estimationSaldo.toString(),
+              estimationBalance.toString(),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 36,

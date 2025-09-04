@@ -4,7 +4,7 @@ import 'dart:io';
 import '../models/date_model.dart';
 import '../models/expense_model.dart';
 import '../models/income_model.dart';
-import '../models/saldo_model.dart';
+import '../models/balance_model.dart';
 import '../models/equity_model.dart';
 
 class DbService {
@@ -70,10 +70,10 @@ class DbService {
           );
         ''');
         await db.execute('''
-          CREATE TABLE saldo (
+          CREATE TABLE balance (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             date_id INTEGER NOT NULL,
-            saldo INTEGER,
+            balance INTEGER,
             FOREIGN KEY(date_id) REFERENCES dates(id) ON DELETE CASCADE
           );
         ''');
@@ -83,7 +83,7 @@ class DbService {
               date_id INTEGER NOT NULL,
               expense_estimation INTEGER,
               income_estimation INTEGER,
-              estimation_saldo INTEGER,
+              estimation_balance INTEGER,
               FOREIGN KEY(date_id) REFERENCES dates(id) ON DELETE CASCADE
             );
           ''');
@@ -112,9 +112,9 @@ class DbService {
     return await db.insert('income', income.toMap());
   }
 
-  static Future<int> insertSaldo(SaldoModel saldo) async {
+  static Future<int> insertBalance(BalanceModel balance) async {
     final db = await database;
-    return await db.insert('saldo', saldo.toMap());
+    return await db.insert('balance', balance.toMap());
   }
 
   // Get date by value
@@ -137,13 +137,13 @@ class DbService {
     final db = await database;
     await db.delete('expenses');
     await db.delete('income');
-    await db.delete('saldo');
+    await db.delete('balance');
     await db.delete('dates');
     await db.delete('equity');
     // Reset auto-increment id (sqlite_sequence) untuk semua tabel
     await db.rawDelete("DELETE FROM sqlite_sequence WHERE name='expenses'");
     await db.rawDelete("DELETE FROM sqlite_sequence WHERE name='income'");
-    await db.rawDelete("DELETE FROM sqlite_sequence WHERE name='saldo'");
+    await db.rawDelete("DELETE FROM sqlite_sequence WHERE name='balance'");
     await db.rawDelete("DELETE FROM sqlite_sequence WHERE name='dates'");
     await db.rawDelete("DELETE FROM sqlite_sequence WHERE name='equity'");
   }
