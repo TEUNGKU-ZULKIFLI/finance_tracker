@@ -117,6 +117,12 @@ class DbService {
     return await db.insert('balance', balance.toMap());
   }
 
+  static Future<List<EquityModel>> getAllEquity() async {
+  final db = await database;
+  final res = await db.query('equity');
+  return res.map((e) => EquityModel.fromMap(e)).toList();
+}
+
   // Get date by value
   static Future<DateModel?> getDateByValue(String date) async {
     final db = await database;

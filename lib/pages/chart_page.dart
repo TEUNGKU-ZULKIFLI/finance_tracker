@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:finance_tracker/widgets/charts/chart_weekly.dart';
+import 'package:finance_tracker/services/db_service.dart';
+import 'package:finance_tracker/utils/chart_utils.dart';
 
 class ChartPage extends StatefulWidget {
   const ChartPage({super.key});
@@ -8,14 +11,32 @@ class ChartPage extends StatefulWidget {
 }
 
 class _ChartPageState extends State<ChartPage> {
+  List<Map<String, dynamic>> weeklyData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    final equityList = await DbService.getAllEquity();
+    setState(() {
+      weeklyData = groupEquityByWeek(equityList);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Placeholder(
-      fallbackHeight: 200.0,
-      fallbackWidth: 200.0,
-      color: Theme.of(context).colorScheme.secondary,
-      strokeWidth: 2.0,
-      child: Center(child: Text('Trade Page Placeholder')),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(35.0),
+          child: weeklyData.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : ChartWeekly(weeklyData: weeklyData),
+        ),
+      ),
     );
   }
 }
