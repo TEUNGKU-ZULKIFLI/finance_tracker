@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Appbar custom yang sepenuhnya adaptif theme dan menggunakan helper dari AppTheme.
-
 class Appbar extends StatelessWidget implements PreferredSizeWidget {
   const Appbar({super.key});
 

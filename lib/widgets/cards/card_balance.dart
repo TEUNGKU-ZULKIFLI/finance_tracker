@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finance_tracker/utils/currency_utils.dart';
 import 'package:finance_tracker/services/db_service.dart';
 import 'package:finance_tracker/theme.dart';
 
@@ -44,169 +45,182 @@ class _CardBalanceState extends State<CardBalance> {
   Widget build(BuildContext context) {
     if (loading) return const Center(child: CircularProgressIndicator());
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.primary.withOpacity(0.18),
-            blurRadius: 32,
-            spreadRadius: 2,
-            offset: const Offset(0, 8),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: Container(
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: colorScheme.primary.withOpacity(0.18),
+                blurRadius: 32,
+                spreadRadius: 2,
+                offset: const Offset(0, 8),
+              ),
+              BoxShadow(
+                color: colorScheme.primary.withOpacity(0.08),
+                blurRadius: 8,
+                spreadRadius: 1,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-          BoxShadow(
-            color: colorScheme.primary.withOpacity(0.08),
-            blurRadius: 8,
-            spreadRadius: 1,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 38, vertical: 28),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Icon(
-                  Icons.account_balance_wallet,
-                  color: colorScheme.primary,
-                  size: 50,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.account_balance_wallet,
+                      color: colorScheme.primary,
+                      size: 40,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'BALANCE',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.primary,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(height: 8),
                 Text(
-                  'BALANCE',
+                  formatCurrency(estimationBalance, defaultCurrencyInfo),
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
-                    letterSpacing: 2,
+                    shadows: [
+                      Shadow(
+                        color: colorScheme.primary.withOpacity(0.35),
+                        blurRadius: 16,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              estimationBalance.toString(),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: colorScheme.primary,
-                shadows: [
-                  Shadow(
-                    color: colorScheme.primary.withOpacity(0.35),
-                    blurRadius: 16,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: colorScheme.expense.withOpacity(0.10),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                const SizedBox(height: 18),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: colorScheme.expense.withOpacity(0.10),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
                           children: [
-                            Icon(
-                              Icons.arrow_circle_down_rounded,
-                              color: colorScheme.expense,
-                              size: 20,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.arrow_circle_down_rounded,
+                                  color: colorScheme.expense,
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'EXPENSE',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: colorScheme.expense,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(height: 2),
                             Text(
-                              'EXPENSE',
+                              formatCurrency(
+                                expenseEstimation,
+                                defaultCurrencyInfo,
+                              ),
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
                                 color: colorScheme.expense,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.redAccent.withOpacity(0.55),
+                                    blurRadius: 16,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          expenseEstimation.toString(),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.expense,
-                            shadows: [
-                              Shadow(
-                                color: Colors.redAccent.withOpacity(0.55),
-                                blurRadius: 16,
-                                offset: Offset(0, 0),
-                              ),
-                            ],
-                          ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: colorScheme.income.withOpacity(0.10),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 24),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: colorScheme.income.withOpacity(0.10),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        child: Column(
                           children: [
-                            Icon(
-                              Icons.arrow_circle_up_rounded,
-                              color: colorScheme.income,
-                              size: 20,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.arrow_circle_up_rounded,
+                                  color: colorScheme.income,
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'INCOME',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: colorScheme.income,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(height: 2),
                             Text(
-                              'INCOME',
+                              formatCurrency(
+                                incomeEstimation,
+                                defaultCurrencyInfo,
+                              ),
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
                                 color: colorScheme.income,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.greenAccent.withOpacity(0.55),
+                                    blurRadius: 16,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          incomeEstimation.toString(),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.income,
-                            shadows: [
-                              Shadow(
-                                color: Colors.greenAccent.withOpacity(0.55),
-                                blurRadius: 16,
-                                offset: Offset(0, 0),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

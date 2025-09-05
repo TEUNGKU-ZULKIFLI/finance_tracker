@@ -4,6 +4,9 @@ import "package:flutter/material.dart";
 extension CustomColors on ColorScheme {
   Color get expense => const Color(0xfff36b7f); // Soft red
   Color get income => const Color(0xff4caf50); // Soft green
+  Color get primer => const Color(0xff1E3A8A); // warna primer
+  Color get sekunder => const Color(0xffF97316); // warna sekunder
+  Color get tersier => const Color(0xff84CC16); // warna tersier
 }
 
 class MaterialTheme {

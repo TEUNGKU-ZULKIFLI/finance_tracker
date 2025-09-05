@@ -18,20 +18,18 @@ final Map<String, CurrencyInfo> expenseCurrency = {
 
 final Map<String, CurrencyInfo> incomeCurrency = {
   'Gaji': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
-  'Trade': CurrencyInfo('USD', '\$', 'en_US'),
+  'Lainnya': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
 };
 
 String formatCurrency(num value, CurrencyInfo info) {
-  if (info.label == 'IDR') {
-    final format = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp. ', decimalDigits: 0);
-    return format.format(value);
-  }
-  if (info.label == 'USD') {
-    final format = NumberFormat.currency(locale: 'en_US', symbol: '\$', decimalDigits: 2);
-    return format.format(value / 100);
-  }
-  final format = NumberFormat.currency(locale: info.locale, symbol: info.symbol);
+  // Hanya format IDR untuk saat ini
+  final format = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp. ', decimalDigits: 0);
   return format.format(value);
+}
+
+int parseCurrencyToInt(String formatted) {
+  final digits = formatted.replaceAll(RegExp(r'[^0-9]'), '');
+  return int.tryParse(digits) ?? 0;
 }
 
 class CurrencyInputFormatter extends TextInputFormatter {
@@ -52,5 +50,4 @@ class CurrencyInputFormatter extends TextInputFormatter {
 }
 
 // Untuk penambahan mata uang lain, cukup tambahkan di sini dan update mapping
-
 final CurrencyInfo defaultCurrencyInfo = CurrencyInfo('IDR', 'Rp. ', 'id_ID');

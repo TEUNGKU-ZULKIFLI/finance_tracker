@@ -1,5 +1,6 @@
 import 'package:finance_tracker/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:finance_tracker/utils/currency_utils.dart';
 import 'package:finance_tracker/widgets/snackbar.dart';
 import 'package:finance_tracker/services/db_service.dart';
 import 'package:finance_tracker/models/date_model.dart';
@@ -31,6 +32,7 @@ class _InputPageState extends State<InputPage> {
     Overlay.of(context).insert(_snackbarEntry!);
     Future.delayed(const Duration(seconds: 3), () => _snackbarEntry?.remove());
   }
+
   int _step = 0;
   final _dateController = TextEditingController();
   final Map<String, TextEditingController> _expenseControllers = {
@@ -73,9 +75,21 @@ class _InputPageState extends State<InputPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.calendar_today, color: Theme.of(context).colorScheme.primary, size: 22),
+                  Icon(
+                    Icons.calendar_today,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 22,
+                  ),
                   const SizedBox(width: 8),
-                  Text('DATE', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary, letterSpacing: 2)),
+                  Text(
+                    'DATE',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                      letterSpacing: 2,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
@@ -86,7 +100,9 @@ class _InputPageState extends State<InputPage> {
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.calendar_today),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
                 readOnly: true,
@@ -98,7 +114,8 @@ class _InputPageState extends State<InputPage> {
                     lastDate: DateTime(2100),
                   );
                   if (picked != null) {
-                    _dateController.text = '${picked.day}/${picked.month}/${picked.year}';
+                    _dateController.text =
+                        '${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
                   }
                 },
               ),
@@ -109,8 +126,12 @@ class _InputPageState extends State<InputPage> {
                     child: OutlinedButton(
                       onPressed: _reset,
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Theme.of(context).colorScheme.secondary,
-                        side: BorderSide(color: Theme.of(context).colorScheme.secondary),
+                        foregroundColor: Theme.of(
+                          context,
+                        ).colorScheme.secondary,
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
                       child: const Text('CANCEL'),
                     ),
@@ -130,7 +151,10 @@ class _InputPageState extends State<InputPage> {
               ),
               if (_errorMsg != null) ...[
                 const SizedBox(height: 8),
-                Text(_errorMsg!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                Text(
+                  _errorMsg!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
               ],
             ],
           ),
@@ -151,27 +175,48 @@ class _InputPageState extends State<InputPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.arrow_circle_down_rounded, color: Theme.of(context).colorScheme.expense, size: 22),
+                  Icon(
+                    Icons.arrow_circle_down_rounded,
+                    color: Theme.of(context).colorScheme.expense,
+                    size: 22,
+                  ),
                   const SizedBox(width: 8),
-                  Text('EXPENSE', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.expense, letterSpacing: 2)),
+                  Text(
+                    'EXPENSE',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.expense,
+                      letterSpacing: 2,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
-              ..._expenseControllers.entries.map((e) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: TextField(
-                  controller: e.value,
-                  decoration: InputDecoration(
-                    labelText: e.key,
-                    border: const OutlineInputBorder(),
-                    prefixIcon: const Icon(Icons.money_off),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+              ..._expenseControllers.entries.map(
+                (e) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: TextField(
+                    controller: e.value,
+                    decoration: InputDecoration(
+                      labelText: e.key,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.money_off),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
                     ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      CurrencyInputFormatter(
+                        expenseCurrency[e.key] ?? defaultCurrencyInfo,
+                      ),
+                    ],
                   ),
-                  keyboardType: TextInputType.number,
                 ),
-              )),
+              ),
               const SizedBox(height: 12),
               Row(
                 children: [
@@ -179,8 +224,12 @@ class _InputPageState extends State<InputPage> {
                     child: OutlinedButton(
                       onPressed: () => setState(() => _step = 1),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Theme.of(context).colorScheme.secondary,
-                        side: BorderSide(color: Theme.of(context).colorScheme.secondary),
+                        foregroundColor: Theme.of(
+                          context,
+                        ).colorScheme.secondary,
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
                       child: const Text('BACK'),
                     ),
@@ -200,7 +249,10 @@ class _InputPageState extends State<InputPage> {
               ),
               if (_errorMsg != null) ...[
                 const SizedBox(height: 8),
-                Text(_errorMsg!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                Text(
+                  _errorMsg!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
               ],
             ],
           ),
@@ -221,9 +273,21 @@ class _InputPageState extends State<InputPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.arrow_circle_up_rounded, color: Theme.of(context).colorScheme.income, size: 22),
+                  Icon(
+                    Icons.arrow_circle_up_rounded,
+                    color: Theme.of(context).colorScheme.income,
+                    size: 22,
+                  ),
                   const SizedBox(width: 8),
-                  Text('INCOME', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.income, letterSpacing: 2)),
+                  Text(
+                    'INCOME',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.income,
+                      letterSpacing: 2,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
@@ -234,10 +298,17 @@ class _InputPageState extends State<InputPage> {
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.attach_money),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  CurrencyInputFormatter(
+                    incomeCurrency['Gaji'] ?? defaultCurrencyInfo,
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               Row(
@@ -250,10 +321,15 @@ class _InputPageState extends State<InputPage> {
                         border: const OutlineInputBorder(),
                         prefixIcon: const Icon(Icons.money),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                       ),
                       keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        CurrencyInputFormatter(defaultCurrencyInfo),
+                      ],
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -273,8 +349,12 @@ class _InputPageState extends State<InputPage> {
                     child: OutlinedButton(
                       onPressed: () => setState(() => _step = 2),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Theme.of(context).colorScheme.secondary,
-                        side: BorderSide(color: Theme.of(context).colorScheme.secondary),
+                        foregroundColor: Theme.of(
+                          context,
+                        ).colorScheme.secondary,
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
                       child: const Text('BACK'),
                     ),
@@ -294,7 +374,10 @@ class _InputPageState extends State<InputPage> {
               ),
               if (_errorMsg != null) ...[
                 const SizedBox(height: 8),
-                Text(_errorMsg!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                Text(
+                  _errorMsg!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
               ],
             ],
           ),
@@ -318,15 +401,24 @@ class _InputPageState extends State<InputPage> {
       return;
     }
     // Validasi minimal satu field expense/income terisi
-    final expenseValues = _expenseControllers.values.map((c) => c.text.trim()).toList();
-    final incomeValues = _incomeControllers.values.map((c) => c.text.trim()).toList();
+    final expenseValues = _expenseControllers.values
+        .map((c) => c.text.trim())
+        .toList();
+    final incomeValues = _incomeControllers.values
+        .map((c) => c.text.trim())
+        .toList();
     final isExpenseFilled = expenseValues.any((v) => v.isNotEmpty && v != '0');
     final isIncomeFilled = incomeValues.any((v) => v.isNotEmpty && v != '0');
     if (!isExpenseFilled && !isIncomeFilled) {
-      setState(() => _errorMsg = 'Minimal satu field pengeluaran/pemasukan harus diisi');
+      setState(
+        () =>
+            _errorMsg = 'Minimal satu field pengeluaran/pemasukan harus diisi',
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Minimal satu field pengeluaran/pemasukan harus diisi'),
+          content: const Text(
+            'Minimal satu field pengeluaran/pemasukan harus diisi',
+          ),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
@@ -342,30 +434,36 @@ class _InputPageState extends State<InputPage> {
         dateId = dateModel.id!;
       }
 
-      // Insert expense
       final expenseModel = ExpenseModel(
         dateId: dateId,
-        pagi: int.tryParse(_expenseControllers['Pagi']?.text ?? '0') ?? 0,
-        siang: int.tryParse(_expenseControllers['Siang']?.text ?? '0') ?? 0,
-        sore: int.tryParse(_expenseControllers['Sore']?.text ?? '0') ?? 0,
-        malam: int.tryParse(_expenseControllers['Malam']?.text ?? '0') ?? 0,
-        bensin: int.tryParse(_expenseControllers['Bensin']?.text ?? '0') ?? 0,
+        pagi: parseCurrencyToInt(_expenseControllers['Pagi']?.text ?? '0'),
+        siang: parseCurrencyToInt(_expenseControllers['Siang']?.text ?? '0'),
+        sore: parseCurrencyToInt(_expenseControllers['Sore']?.text ?? '0'),
+        malam: parseCurrencyToInt(_expenseControllers['Malam']?.text ?? '0'),
+        bensin: parseCurrencyToInt(_expenseControllers['Bensin']?.text ?? '0'),
       );
       await DbService.insertExpense(expenseModel);
 
-      // Insert income
       final incomeModel = IncomeModel(
         dateId: dateId,
-        gaji: int.tryParse(_incomeControllers['Gaji']?.text ?? '0') ?? 0,
-        lainnya: int.tryParse(_incomeControllers['Lainnya']?.text ?? '0') ?? 0,
+        gaji: parseCurrencyToInt(_incomeControllers['Gaji']?.text ?? '0'),
+        lainnya: parseCurrencyToInt(_incomeControllers['Lainnya']?.text ?? '0'),
         currency: _currency,
       );
       await DbService.insertIncome(incomeModel);
 
       // Hitung balance
       final totalIncome = incomeModel.gaji + incomeModel.lainnya;
-      final totalExpense = expenseModel.pagi + expenseModel.siang + expenseModel.sore + expenseModel.malam + expenseModel.bensin;
-      final balanceModel = BalanceModel(dateId: dateId, balance: totalIncome - totalExpense);
+      final totalExpense =
+          expenseModel.pagi +
+          expenseModel.siang +
+          expenseModel.sore +
+          expenseModel.malam +
+          expenseModel.bensin;
+      final balanceModel = BalanceModel(
+        dateId: dateId,
+        balance: totalIncome - totalExpense,
+      );
       await DbService.insertBalance(balanceModel);
 
       // Insert equity
@@ -377,7 +475,7 @@ class _InputPageState extends State<InputPage> {
       );
       await DbService.insertEquity(equityModel);
 
-  _showCustomSnackbar('Data berhasil disimpan!', SnackbarType.success);
+      _showCustomSnackbar('Data berhasil disimpan!', SnackbarType.success);
       _reset();
     } catch (e) {
       _showCustomSnackbar('Gagal menyimpan data: $e', SnackbarType.error);
@@ -392,27 +490,53 @@ class _InputPageState extends State<InputPage> {
         child: _step == 0
             ? Card(
                 elevation: 8,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 color: Theme.of(context).colorScheme.surface,
                 child: Padding(
                   padding: const EdgeInsets.all(32),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.flag, size: 56, color: Theme.of(context).colorScheme.primary),
+                      Icon(
+                        Icons.flag,
+                        size: 56,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                       const SizedBox(height: 16),
-                      Text('Selesaikan misi harianmu!', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)),
+                      Text(
+                        'Selesaikan misi harianmu!',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
                       const SizedBox(height: 8),
-                      Text('Tap tombol di bawah untuk mulai input data harian.', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
+                      Text(
+                        'Tap tombol di bawah untuk mulai input data harian.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
                       const SizedBox(height: 32),
                       ElevatedButton.icon(
                         icon: const Icon(Icons.add),
                         label: const Text('Input Data'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
                           foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 32,
+                            vertical: 16,
+                          ),
                         ),
                         onPressed: () => setState(() => _step = 1),
                       ),

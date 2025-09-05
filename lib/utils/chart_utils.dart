@@ -28,8 +28,12 @@ List<Map<String, dynamic>> groupEquityByMonth(
   for (var eq in equityList) {
     final dateStr = dateMap[eq.dateId]?.date ?? '';
     int month = 0;
-    if (dateStr.isNotEmpty) {
-      month = DateTime.parse(dateStr).month;
+    try {
+      if (dateStr.isNotEmpty) {
+        month = DateTime.parse(dateStr).month;
+      }
+    } catch (_) {
+      month = 0;
     }
     if (!monthly.containsKey(month)) {
       monthly[month] = {

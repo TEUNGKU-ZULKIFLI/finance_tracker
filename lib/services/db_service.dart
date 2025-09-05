@@ -102,6 +102,15 @@ class DbService {
     return await db.insert('dates', date.toMap());
   }
 
+  static Future<DateModel?> getDateByValue(String date) async {
+    final db = await database;
+    final res = await db.query('dates', where: 'date = ?', whereArgs: [date]);
+    if (res.isNotEmpty) {
+      return DateModel.fromMap(res.first);
+    }
+    return null;
+  }
+
   static Future<int> insertExpense(ExpenseModel expense) async {
     final db = await database;
     return await db.insert('expenses', expense.toMap());
@@ -123,21 +132,11 @@ class DbService {
   return res.map((e) => EquityModel.fromMap(e)).toList();
 }
 
-  // Get date by value
-  static Future<DateModel?> getDateByValue(String date) async {
-    final db = await database;
-    final res = await db.query('dates', where: 'date = ?', whereArgs: [date]);
-    if (res.isNotEmpty) {
-      return DateModel.fromMap(res.first);
-    }
-    return null;
-  }
     // Hapus satu tanggal beserta relasi datanya
   static Future<int> deleteDate(int id) async {
     final db = await database;
     return await db.delete('dates', where: 'id = ?', whereArgs: [id]);
   }
-
   // Hapus semua data (reset tabel)
   static Future<void> clearAll() async {
     final db = await database;
