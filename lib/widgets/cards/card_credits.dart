@@ -24,9 +24,7 @@ class CardCredits extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
       elevation: 6,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
         height: height ?? 280, // Tinggi default lebih proporsional
         decoration: BoxDecoration(
@@ -50,7 +48,10 @@ class CardCredits extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28), // Tambah padding vertikal
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 28,
+        ), // Tambah padding vertikal
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -61,7 +62,9 @@ class CardCredits extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16), // Lebih bulat
                     // ignore: deprecated_member_use
-                    color: colorScheme.surfaceContainerHighest.withOpacity(0.85),
+                    color: colorScheme.surfaceContainerHighest.withOpacity(
+                      0.85,
+                    ),
                   ),
                   padding: const EdgeInsets.all(10), // Lebih besar
                   child: ClipRRect(
@@ -77,7 +80,10 @@ class CardCredits extends StatelessWidget {
                 const Spacer(),
                 Icon(Icons.credit_card, color: colorScheme.primary, size: 32),
                 PopupMenuButton<String>(
-                  icon: Icon(Icons.more_vert, color: colorScheme.onSurfaceVariant),
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                   onSelected: (value) {
                     if (value == 'edit' && onEdit != null) onEdit!();
                     if (value == 'remove' && onDelete != null) onDelete!();

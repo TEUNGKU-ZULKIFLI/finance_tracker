@@ -6,6 +6,7 @@ import '../models/expense_model.dart';
 import '../models/income_model.dart';
 import '../models/balance_model.dart';
 import '../models/equity_model.dart';
+import '../models/credit_card_model.dart';
 
 class DbService {
   static Database? _db;
@@ -27,7 +28,9 @@ class DbService {
       final tempDb = await openDatabase(path);
       final incomeRes = await tempDb.rawQuery("PRAGMA table_info(income);");
       final hasCurrency = incomeRes.any((col) => col['name'] == 'currency');
-      final equityRes = await tempDb.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='equity';");
+      final equityRes = await tempDb.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='equity';",
+      );
       final hasEquity = equityRes.isNotEmpty;
       await tempDb.close();
       // Jika kolom currency belum ada atau tabel equity belum ada, hapus database
@@ -41,6 +44,14 @@ class DbService {
       path,
       version: 1,
       onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE credit_card (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nama_rek TEXT,
+            no_rek TEXT,
+            logo_asset TEXT
+          );
+        ''');
         await db.execute('''
           CREATE TABLE dates (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -77,7 +88,7 @@ class DbService {
             FOREIGN KEY(date_id) REFERENCES dates(id) ON DELETE CASCADE
           );
         ''');
-          await db.execute('''
+        await db.execute('''
             CREATE TABLE equity (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               date_id INTEGER NOT NULL,
@@ -90,6 +101,37 @@ class DbService {
       },
     );
   }
+
+  // Insert Credit Card
+  Future<int> insertCreditCard(CreditCardModel card) async {
+    final db = await database;
+    return await db.insert('credit_card', card.toMap());
+  }
+
+  // Get all Credit Cards
+  Future<List<CreditCardModel>> getCreditCards() async {
+    final db = await database;
+    final res = await db.query('credit_card');
+    return res.map((e) => CreditCardModel.fromMap(e)).toList();
+  }
+
+  // Delete Credit Card
+  Future<int> deleteCreditCard(int id) async {
+    final db = await database;
+    return await db.delete('credit_card', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // Update Credit Card
+  Future<int> updateCreditCard(CreditCardModel card) async {
+    final db = await database;
+    return await db.update(
+      'credit_card',
+      card.toMap(),
+      where: 'id = ?',
+      whereArgs: [card.id],
+    );
+  }
+
   // Insert Equity
   static Future<int> insertEquity(EquityModel equity) async {
     final db = await database;
@@ -127,16 +169,17 @@ class DbService {
   }
 
   static Future<List<EquityModel>> getAllEquity() async {
-  final db = await database;
-  final res = await db.query('equity');
-  return res.map((e) => EquityModel.fromMap(e)).toList();
-}
+    final db = await database;
+    final res = await db.query('equity');
+    return res.map((e) => EquityModel.fromMap(e)).toList();
+  }
 
-    // Hapus satu tanggal beserta relasi datanya
+  // Hapus satu tanggal beserta relasi datanya
   static Future<int> deleteDate(int id) async {
     final db = await database;
     return await db.delete('dates', where: 'id = ?', whereArgs: [id]);
   }
+
   // Hapus semua data (reset tabel)
   static Future<void> clearAll() async {
     final db = await database;
