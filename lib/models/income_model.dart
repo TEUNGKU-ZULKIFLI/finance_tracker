@@ -3,14 +3,12 @@ class IncomeModel {
   final int dateId;
   final int gaji;
   final int lainnya;
-  final String currency;
 
   IncomeModel({
     this.id,
     required this.dateId,
     required this.gaji,
     required this.lainnya,
-    required this.currency,
   });
 
   factory IncomeModel.fromMap(Map<String, dynamic> map) => IncomeModel(
@@ -18,7 +16,6 @@ class IncomeModel {
     dateId: map['date_id'],
     gaji: map['gaji'],
     lainnya: map['lainnya'],
-    currency: map['currency'],
   );
 
   Map<String, dynamic> toMap() => {
@@ -26,6 +23,5 @@ class IncomeModel {
     'date_id': dateId,
     'gaji': gaji,
     'lainnya': lainnya,
-    'currency': currency,
   };
 }

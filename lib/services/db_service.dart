@@ -46,22 +46,6 @@ class DbService {
       version: 1,
       onCreate: (db, version) async {
         await db.execute('''
-          CREATE TABLE user_history (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            action TEXT,
-            desc TEXT,
-            timestamp TEXT
-          );
-        ''');
-        await db.execute('''
-          CREATE TABLE credit_card (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nama_rek TEXT,
-            no_rek TEXT,
-            logo_asset TEXT
-          );
-        ''');
-        await db.execute('''
           CREATE TABLE dates (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             date TEXT NOT NULL UNIQUE
@@ -85,7 +69,6 @@ class DbService {
             date_id INTEGER NOT NULL,
             gaji INTEGER,
             lainnya INTEGER,
-            currency TEXT,
             FOREIGN KEY(date_id) REFERENCES dates(id) ON DELETE CASCADE
           );
         ''');
@@ -107,6 +90,22 @@ class DbService {
               FOREIGN KEY(date_id) REFERENCES dates(id) ON DELETE CASCADE
             );
           ''');
+        await db.execute('''
+          CREATE TABLE credit_card (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nama_rek TEXT,
+            no_rek TEXT,
+            logo_asset TEXT
+          );
+        ''');
+        await db.execute('''
+          CREATE TABLE user_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            action TEXT,
+            desc TEXT,
+            timestamp TEXT
+          );
+        ''');
       },
     );
   }

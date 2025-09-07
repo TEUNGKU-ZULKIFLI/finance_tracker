@@ -46,7 +46,6 @@ class _InputPageState extends State<InputPage> {
     'Gaji': TextEditingController(),
     'Lainnya': TextEditingController(),
   };
-  String _currency = 'IDR';
   String? _errorMsg;
 
   void _reset() {
@@ -57,7 +56,6 @@ class _InputPageState extends State<InputPage> {
     _dateController.clear();
     _expenseControllers.forEach((_, c) => c.clear());
     _incomeControllers.forEach((_, c) => c.clear());
-    _currency = 'IDR';
   }
 
   Widget _buildStepper() {
@@ -68,7 +66,7 @@ class _InputPageState extends State<InputPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: Theme.of(context).colorScheme.surface,
         child: Padding(
-          padding: const EdgeInsets.all(28),
+          padding: const EdgeInsets.all(15),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -150,7 +148,7 @@ class _InputPageState extends State<InputPage> {
                 ],
               ),
               if (_errorMsg != null) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 Text(
                   _errorMsg!,
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
@@ -168,7 +166,7 @@ class _InputPageState extends State<InputPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: Theme.of(context).colorScheme.surface,
         child: Padding(
-          padding: const EdgeInsets.all(28),
+          padding: const EdgeInsets.all(15),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -217,7 +215,7 @@ class _InputPageState extends State<InputPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 5),
               Row(
                 children: [
                   Expanded(
@@ -248,7 +246,7 @@ class _InputPageState extends State<InputPage> {
                 ],
               ),
               if (_errorMsg != null) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 Text(
                   _errorMsg!,
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
@@ -266,7 +264,7 @@ class _InputPageState extends State<InputPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: Theme.of(context).colorScheme.surface,
         child: Padding(
-          padding: const EdgeInsets.all(28),
+          padding: const EdgeInsets.all(15),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -311,38 +309,24 @@ class _InputPageState extends State<InputPage> {
                 ],
               ),
               const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _incomeControllers['Lainnya'],
-                      decoration: InputDecoration(
-                        labelText: 'Lainnya',
-                        border: const OutlineInputBorder(),
-                        prefixIcon: const Icon(Icons.money),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        CurrencyInputFormatter(defaultCurrencyInfo),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  DropdownButton<String>(
-                    value: _currency,
-                    items: ['IDR', 'USD']
-                        .map((c) => DropdownMenuItem(value: c, child: Text(c)))
-                        .toList(),
-                    onChanged: (val) => setState(() => _currency = val!),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
+TextField(
+  controller: _incomeControllers['Lainnya'],
+  decoration: InputDecoration(
+    labelText: 'Lainnya',
+    border: const OutlineInputBorder(),
+    prefixIcon: const Icon(Icons.money),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Theme.of(context).colorScheme.primary,
+      ),
+    ),
+  ),
+  keyboardType: TextInputType.number,
+  inputFormatters: [
+    CurrencyInputFormatter(defaultCurrencyInfo),
+  ],
+),
+              const SizedBox(height: 5),
               Row(
                 children: [
                   Expanded(
@@ -373,7 +357,7 @@ class _InputPageState extends State<InputPage> {
                 ],
               ),
               if (_errorMsg != null) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 Text(
                   _errorMsg!,
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
@@ -449,13 +433,12 @@ class _InputPageState extends State<InputPage> {
         DateTime.now().toIso8601String(),
       );
 
-      final incomeModel = IncomeModel(
-        dateId: dateId,
-        gaji: parseCurrencyToInt(_incomeControllers['Gaji']?.text ?? '0'),
-        lainnya: parseCurrencyToInt(_incomeControllers['Lainnya']?.text ?? '0'),
-        currency: _currency,
-      );
-      await DbService.insertIncome(incomeModel);
+final incomeModel = IncomeModel(
+  dateId: dateId,
+  gaji: parseCurrencyToInt(_incomeControllers['Gaji']?.text ?? '0'),
+  lainnya: parseCurrencyToInt(_incomeControllers['Lainnya']?.text ?? '0'),
+);
+await DbService.insertIncome(incomeModel);
 
       // Hitung balance
       final totalIncome = incomeModel.gaji + incomeModel.lainnya;
