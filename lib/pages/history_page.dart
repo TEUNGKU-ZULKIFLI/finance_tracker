@@ -21,7 +21,10 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Future<void> _loadHistory() async {
-    historyList = await DbService().getHistorySorted(sortBy: sortBy, desc: desc);
+    historyList = await DbService().getHistorySorted(
+      sortBy: sortBy,
+      desc: desc,
+    );
     setState(() {});
   }
 
@@ -58,6 +61,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: Column(
         children: [
@@ -65,10 +69,9 @@ class _HistoryPageState extends State<HistoryPage> {
           Center(
             child: Text(
               'HISTORY',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
+              style: textTheme.titleLarge?.copyWith(
                 color: colorScheme.primary,
+                fontWeight: FontWeight.bold,
                 letterSpacing: 1.2,
               ),
             ),
@@ -122,26 +125,56 @@ class _HistoryPageState extends State<HistoryPage> {
           ),
           Expanded(
             child: historyList.isEmpty
-                ? const Center(child: Text('No history available'))
+                ? Center(
+                    child: Text(
+                      'No history available',
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  )
                 : ListView.builder(
                     itemCount: historyList.length,
                     itemBuilder: (context, index) {
                       final h = historyList[index];
-                      return ListTile(
-                        leading: Icon(
-                          _getIcon(h.action),
-                          color: colorScheme.primary,
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
                         ),
-                        title: Text(h.desc),
-                        subtitle: Text(
-                          h.timestamp.replaceFirst('T', ' ').substring(0, 19),
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                        trailing: Text(
-                          h.action.replaceAll('_', ' '),
-                          style: TextStyle(
-                            color: colorScheme.secondary,
-                            fontWeight: FontWeight.w600,
+                        child: Card(
+                          color: colorScheme.surface,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: ListTile(
+                            leading: Icon(
+                              _getIcon(h.action),
+                              color: colorScheme.primary,
+                            ),
+                            title: Text(
+                              h.desc,
+                              style: textTheme.bodyLarge?.copyWith(
+                                color: colorScheme.onSurface,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            subtitle: Text(
+                              h.timestamp
+                                  .replaceFirst('T', ' ')
+                                  .substring(0, 19),
+                              style: textTheme.labelMedium?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            trailing: Text(
+                              h.action.replaceAll('_', ' '),
+                              style: textTheme.labelMedium?.copyWith(
+                                color: colorScheme.secondary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                       );

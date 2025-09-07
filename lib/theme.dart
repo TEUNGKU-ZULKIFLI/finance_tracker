@@ -7,6 +7,7 @@ extension CustomColors on ColorScheme {
   Color get primer => const Color(0xff1E3A8A); // warna primer
   Color get sekunder => const Color(0xffF97316); // warna sekunder
   Color get tersier => const Color(0xff84CC16); // warna tersier
+  Color get backimg => const Color(0xffffffff); // warna background image
 }
 
 class MaterialTheme {

@@ -31,22 +31,36 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-@override
-Widget build(BuildContext context) {
-  if (loading) {
-    return const Center(child: CircularProgressIndicator());
-  }
-  return SafeArea(
-    child: SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(height: 24),
-          const CardBalance(),
-          ChartPie(balance: balance),
-        ],
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    if (loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'HOME',
+                style: textTheme.titleLarge?.copyWith(
+                  color: colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const SizedBox(height: 24),
+              const CardBalance(),
+              const SizedBox(height: 24),
+              ChartPie(balance: balance),
+            ],
+          ),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

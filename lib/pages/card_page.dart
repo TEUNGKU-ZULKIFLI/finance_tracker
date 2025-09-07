@@ -45,6 +45,7 @@ class _CardPageState extends State<CardPage> {
       context: context,
       builder: (context) {
         final colorScheme = Theme.of(context).colorScheme;
+        final textTheme = Theme.of(context).textTheme;
         final formKey = GlobalKey<FormState>();
         return AlertDialog(
           shape: RoundedRectangleBorder(
@@ -63,9 +64,8 @@ class _CardPageState extends State<CardPage> {
                 children: [
                   Text(
                     'Add Credit Card',
-                    style: TextStyle(
+                    style: textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
                       color: colorScheme.primary,
                       letterSpacing: 1.2,
                     ),
@@ -163,18 +163,17 @@ class _CardPageState extends State<CardPage> {
                               );
                               await DbService().insertCreditCard(card);
                               await DbService().insertHistory(
-  'CREATE_CARD',
-  'Card "${card.namaRek}" successfully created',
-  DateTime.now().toIso8601String(),
-);
-// ignore: use_build_context_synchronously
-ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text('Card successfully added!'),
-    // ignore: use_build_context_synchronously
-    backgroundColor: Theme.of(context).colorScheme.primary,
-  ),
-);
+                                'CREATE_CARD',
+                                'Card "${card.namaRek}" successfully created',
+                                DateTime.now().toIso8601String(),
+                              );
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Card successfully added!'),
+                                  backgroundColor: colorScheme.primary,
+                                ),
+                              );
                               // ignore: use_build_context_synchronously
                               Navigator.pop(context);
                               _loadCards();
@@ -207,6 +206,7 @@ ScaffoldMessenger.of(context).showSnackBar(
       context: context,
       builder: (context) {
         final colorScheme = Theme.of(context).colorScheme;
+        final textTheme = Theme.of(context).textTheme;
         final formKey = GlobalKey<FormState>();
         return AlertDialog(
           shape: RoundedRectangleBorder(
@@ -225,9 +225,8 @@ ScaffoldMessenger.of(context).showSnackBar(
                 children: [
                   Text(
                     'Edit Credit Card',
-                    style: TextStyle(
+                    style: textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
                       color: colorScheme.primary,
                       letterSpacing: 1.2,
                     ),
@@ -329,18 +328,17 @@ ScaffoldMessenger.of(context).showSnackBar(
                               );
                               await DbService().updateCreditCard(updatedCard);
                               await DbService().insertHistory(
-  'UPDATE_CARD',
-  'Card "${updatedCard.namaRek}" successfully updated',
-  DateTime.now().toIso8601String(),
-);
-// ignore: use_build_context_synchronously
-ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text('Card successfully updated!'),
-    // ignore: use_build_context_synchronously
-    backgroundColor: Theme.of(context).colorScheme.primary,
-  ),
-);
+                                'UPDATE_CARD',
+                                'Card "${updatedCard.namaRek}" successfully updated',
+                                DateTime.now().toIso8601String(),
+                              );
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Card successfully updated!'),
+                                  backgroundColor: colorScheme.primary,
+                                ),
+                              );
                               // ignore: use_build_context_synchronously
                               Navigator.pop(context);
                               _loadCards();
@@ -367,23 +365,24 @@ ScaffoldMessenger.of(context).showSnackBar(
   Future<void> _deleteCard(int id, dynamic card) async {
     await DbService().deleteCreditCard(id);
     await DbService().insertHistory(
-  'DELETE_CARD',
-  'Card "${card.namaRek}" successfully deleted',
-  DateTime.now().toIso8601String(),
-);
-// ignore: use_build_context_synchronously
-ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: Text('Card successfully deleted!'),
+      'DELETE_CARD',
+      'Card "${card.namaRek}" successfully deleted',
+      DateTime.now().toIso8601String(),
+    );
     // ignore: use_build_context_synchronously
-    backgroundColor: Theme.of(context).colorScheme.error,
-  ),
-);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Card successfully deleted!'),
+        // ignore: use_build_context_synchronously
+        backgroundColor: Theme.of(context).colorScheme.error,
+      ),
+    );
     _loadCards();
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Padding(
@@ -396,7 +395,7 @@ ScaffoldMessenger.of(context).showSnackBar(
                 label: const Text('Add Card'),
                 onPressed: _showAddCardDialog,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  backgroundColor: colorScheme.primary,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),

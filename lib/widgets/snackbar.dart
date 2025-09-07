@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class Snackbar extends StatelessWidget {
@@ -41,6 +40,8 @@ class Snackbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -52,8 +53,16 @@ class Snackbar extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               // ignore: deprecated_member_use
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.08),
-              blurRadius: 12,
+              color: colorScheme.primary.withOpacity(0.18),
+              blurRadius: 32,
+              spreadRadius: 2,
+              offset: const Offset(0, 8),
+            ),
+            BoxShadow(
+              // ignore: deprecated_member_use
+              color: colorScheme.primary.withOpacity(0.08),
+              blurRadius: 8,
+              spreadRadius: 1,
               offset: const Offset(0, 2),
             ),
           ],
@@ -64,9 +73,8 @@ class Snackbar extends StatelessWidget {
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(
+                style: textTheme.bodyMedium?.copyWith(
                   color: _getTextColor(context),
-                  fontSize: 15,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -76,7 +84,7 @@ class Snackbar extends StatelessWidget {
                 onPressed: onAction,
                 child: Text(
                   actionLabel!,
-                  style: TextStyle(
+                  style: textTheme.labelMedium?.copyWith(
                     color: _getTextColor(context),
                     fontWeight: FontWeight.bold,
                   ),

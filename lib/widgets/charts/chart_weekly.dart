@@ -14,6 +14,7 @@ class ChartWeekly extends StatelessWidget {
     final minBarHeight = 10.0;
 
     return Card(
+      color: colorScheme.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       elevation: 8,
       margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 32),

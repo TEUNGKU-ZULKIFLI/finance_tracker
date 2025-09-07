@@ -15,6 +15,7 @@ class NavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final double fabSize = 56;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -24,9 +25,17 @@ class NavigationBar extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             // ignore: deprecated_member_use
-            color: colorScheme.onSurface.withOpacity(0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
+            color: colorScheme.primary.withOpacity(0.18),
+            blurRadius: 32,
+            spreadRadius: 2,
+            offset: const Offset(0, 8),
+          ),
+          BoxShadow(
+            // ignore: deprecated_member_use
+            color: colorScheme.primary.withOpacity(0.08),
+            blurRadius: 8,
+            spreadRadius: 1,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -35,16 +44,17 @@ class NavigationBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(context, Icons.home, "Home", 0),
-            _buildNavItem(context, Icons.bar_chart_rounded, "Chart", 1),
+            _buildNavItem(context, Icons.home, "Home", 0, textTheme),
+            _buildNavItem(context, Icons.bar_chart_rounded, "Chart", 1, textTheme),
             _buildFabItem(context, fabSize, currentIndex == 2),
-            _buildNavItem(context, Icons.credit_card, "Card", 3),
-            _buildNavItem(context, Icons.history, "History", 4),
+            _buildNavItem(context, Icons.credit_card, "Card", 3, textTheme),
+            _buildNavItem(context, Icons.history, "History", 4, textTheme),
           ],
         ),
       ),
     );
   }
+
   Widget _buildFabItem(BuildContext context, double fabSize, bool isSelected) {
     final colorScheme = Theme.of(context).colorScheme;
     return SizedBox(
@@ -93,6 +103,7 @@ class NavigationBar extends StatelessWidget {
     IconData icon,
     String label,
     int index,
+    TextTheme textTheme,
   ) {
     final colorScheme = Theme.of(context).colorScheme;
     final isSelected = currentIndex == index;
@@ -128,8 +139,7 @@ class NavigationBar extends StatelessWidget {
             ),
             Text(
               label,
-              style: TextStyle(
-                fontSize: 12,
+              style: textTheme.labelMedium?.copyWith(
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 color: isSelected
                     ? colorScheme.onSurface

@@ -1,3 +1,4 @@
+import 'package:finance_tracker/theme.dart';
 import 'package:flutter/material.dart';
 
 class CardCredits extends StatelessWidget {
@@ -26,7 +27,7 @@ class CardCredits extends StatelessWidget {
       elevation: 6,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
-        height: height ?? 280, // Tinggi default lebih proporsional
+        height: height ?? 280,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
@@ -62,7 +63,7 @@ class CardCredits extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16), // Lebih bulat
                     // ignore: deprecated_member_use
-                    color: colorScheme.surfaceContainerHighest.withOpacity(
+                    color: colorScheme.backimg.withOpacity(
                       0.85,
                     ),
                   ),

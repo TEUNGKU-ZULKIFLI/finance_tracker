@@ -24,6 +24,7 @@ class ChartPie extends StatelessWidget {
     ];
 
     return Card(
+      color: colorScheme.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       elevation: 8,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 18),

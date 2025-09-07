@@ -28,13 +28,32 @@ class _ChartPageState extends State<ChartPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(35.0),
-          child: weeklyData.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : ChartWeekly(weeklyData: weeklyData),
+      backgroundColor: colorScheme.surface,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'CHART',
+                  style: textTheme.titleLarge?.copyWith(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                weeklyData.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : ChartWeekly(weeklyData: weeklyData),
+              ],
+            ),
+          ),
         ),
       ),
     );
