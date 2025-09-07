@@ -1,7 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
-import 'dart:io';
 import '../models/date_model.dart';
 import '../models/expense_model.dart';
 import '../models/income_model.dart';
@@ -22,24 +21,6 @@ class DbService {
   static Future<Database> _initDb() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'finance_tracker.db');
-
-    // Cek apakah file database sudah ada
-    final dbFile = File(path);
-    if (await dbFile.exists()) {
-      // Buka database sementara untuk cek struktur
-      final tempDb = await openDatabase(path);
-      final incomeRes = await tempDb.rawQuery("PRAGMA table_info(income);");
-      final hasCurrency = incomeRes.any((col) => col['name'] == 'currency');
-      final equityRes = await tempDb.rawQuery(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='equity';",
-      );
-      final hasEquity = equityRes.isNotEmpty;
-      await tempDb.close();
-      // Jika kolom currency belum ada atau tabel equity belum ada, hapus database
-      if (!hasCurrency || !hasEquity) {
-        await dbFile.delete();
-      }
-    }
 
     // Buka database (akan dibuat ulang jika baru dihapus)
     return await openDatabase(
@@ -108,6 +89,16 @@ class DbService {
           );
         ''');
       },
+      // Siapkan migrasi di masa depan
+      onUpgrade: (db, oldVersion, newVersion) async {
+        // Contoh migrasi:
+        // if (oldVersion < 2) {
+        //   await db.execute("ALTER TABLE income ADD COLUMN currency TEXT;");
+        // }
+        // if (oldVersion < 3) {
+        //   await db.execute("CREATE TABLE equity (...);");
+        // }
+      },
     );
   }
 
@@ -125,24 +116,21 @@ class DbService {
     });
   }
 
-Future<List<UserHistoryModel>> getHistory() async {
-  final db = await database;
-  final res = await db.query('user_history', orderBy: 'timestamp DESC');
-  return res.map((e) => UserHistoryModel.fromMap(e)).toList();
-}
+  Future<List<UserHistoryModel>> getHistory() async {
+    final db = await database;
+    final res = await db.query('user_history', orderBy: 'timestamp DESC');
+    return res.map((e) => UserHistoryModel.fromMap(e)).toList();
+  }
 
-Future<List<UserHistoryModel>> getHistorySorted({
-  String sortBy = 'timestamp',
-  bool desc = true,
-}) async {
-  final db = await database;
-  final order = desc ? 'DESC' : 'ASC';
-  final res = await db.query(
-    'user_history',
-    orderBy: '$sortBy $order',
-  );
-  return res.map((e) => UserHistoryModel.fromMap(e)).toList();
-}
+  Future<List<UserHistoryModel>> getHistorySorted({
+    String sortBy = 'timestamp',
+    bool desc = true,
+  }) async {
+    final db = await database;
+    final order = desc ? 'DESC' : 'ASC';
+    final res = await db.query('user_history', orderBy: '$sortBy $order');
+    return res.map((e) => UserHistoryModel.fromMap(e)).toList();
+  }
 
   Future<int> clearHistory() async {
     final db = await database;
