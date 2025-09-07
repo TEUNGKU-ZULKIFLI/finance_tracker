@@ -18,9 +18,9 @@ class ChartPie extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     final pieData = [
-      {'label': 'Primer', 'value': primer, 'color': colorScheme.primer},
-      {'label': 'Sekunder', 'value': sekunder, 'color': colorScheme.sekunder},
-      {'label': 'Tersier', 'value': tersier, 'color': colorScheme.tersier},
+      {'label': 'Primary', 'value': primer, 'color': colorScheme.primer},
+      {'label': 'Secondary', 'value': sekunder, 'color': colorScheme.sekunder},
+      {'label': 'Tertiary', 'value': tersier, 'color': colorScheme.tersier},
     ];
 
     return Card(
@@ -33,7 +33,7 @@ class ChartPie extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "DISTRIBUSI KEBUTUHAN",
+              "NEEDS DISTRIBUTION",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.primary,
@@ -84,6 +84,7 @@ class ChartPie extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 4),
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
                     decoration: BoxDecoration(
+                      // ignore: deprecated_member_use
                       color: (data['color'] as Color).withOpacity(0.08),
                       borderRadius: BorderRadius.circular(8),
                     ),

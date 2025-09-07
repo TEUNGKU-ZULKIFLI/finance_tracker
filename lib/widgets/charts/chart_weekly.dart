@@ -28,7 +28,7 @@ class ChartWeekly extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'BAR CHART MINGGUAN',
+                    'WEEKLY BAR CHART',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -69,7 +69,7 @@ class ChartWeekly extends StatelessWidget {
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             itemCount: weeklyData.length,
-                            separatorBuilder: (_, __) => const SizedBox(width: 24),
+                            separatorBuilder: (_, _) => const SizedBox(width: 24),
                             itemBuilder: (context, i) {
                               final week = weeklyData[i];
                               final expense = week['expense'] as int;
@@ -94,6 +94,7 @@ class ChartWeekly extends StatelessWidget {
                                           borderRadius: BorderRadius.circular(6),
                                           boxShadow: [
                                             BoxShadow(
+                                              // ignore: deprecated_member_use
                                               color: colorScheme.expense.withOpacity(0.35),
                                               blurRadius: 8,
                                               offset: const Offset(0, 2),
@@ -111,6 +112,7 @@ class ChartWeekly extends StatelessWidget {
                                           borderRadius: BorderRadius.circular(6),
                                           boxShadow: [
                                             BoxShadow(
+                                              // ignore: deprecated_member_use
                                               color: colorScheme.income.withOpacity(0.35),
                                               blurRadius: 8,
                                               offset: const Offset(0, 2),
@@ -122,7 +124,7 @@ class ChartWeekly extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 12),
                                   Text(
-                                    'Minggu ${week['week'].toString().padLeft(2, '0')}',
+                                    'Week ${week['week'].toString().padLeft(2, '0')}',
                                     style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface),
                                   ),
                                 ],

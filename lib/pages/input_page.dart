@@ -36,15 +36,15 @@ class _InputPageState extends State<InputPage> {
   int _step = 0;
   final _dateController = TextEditingController();
   final Map<String, TextEditingController> _expenseControllers = {
-    'Pagi': TextEditingController(),
-    'Siang': TextEditingController(),
-    'Sore': TextEditingController(),
-    'Malam': TextEditingController(),
-    'Bensin': TextEditingController(),
+    'Morning': TextEditingController(),
+    'Afternoon': TextEditingController(),
+    'Evening': TextEditingController(),
+    'Night': TextEditingController(),
+    'Fuel': TextEditingController(),
   };
   final Map<String, TextEditingController> _incomeControllers = {
-    'Gaji': TextEditingController(),
-    'Lainnya': TextEditingController(),
+    'Salary': TextEditingController(),
+    'Others': TextEditingController(),
   };
   String? _errorMsg;
 
@@ -94,7 +94,7 @@ class _InputPageState extends State<InputPage> {
               TextField(
                 controller: _dateController,
                 decoration: InputDecoration(
-                  labelText: 'Tanggal',
+                  labelText: 'Date',
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.calendar_today),
                   focusedBorder: OutlineInputBorder(
@@ -290,9 +290,9 @@ class _InputPageState extends State<InputPage> {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: _incomeControllers['Gaji'],
+                controller: _incomeControllers['Salary'],
                 decoration: InputDecoration(
-                  labelText: 'Gaji',
+                  labelText: 'Salary',
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.attach_money),
                   focusedBorder: OutlineInputBorder(
@@ -304,15 +304,15 @@ class _InputPageState extends State<InputPage> {
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   CurrencyInputFormatter(
-                    incomeCurrency['Gaji'] ?? defaultCurrencyInfo,
+                    incomeCurrency['Salary'] ?? defaultCurrencyInfo,
                   ),
                 ],
               ),
               const SizedBox(height: 12),
 TextField(
-  controller: _incomeControllers['Lainnya'],
+  controller: _incomeControllers['Others'],
   decoration: InputDecoration(
-    labelText: 'Lainnya',
+    labelText: 'Others',
     border: const OutlineInputBorder(),
     prefixIcon: const Icon(Icons.money),
     focusedBorder: OutlineInputBorder(
@@ -375,10 +375,10 @@ TextField(
     setState(() => _errorMsg = null);
     final dateStr = _dateController.text;
     if (dateStr.isEmpty) {
-      setState(() => _errorMsg = 'Tanggal wajib diisi');
+      setState(() => _errorMsg = 'Date is required');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Tanggal wajib diisi'),
+          content: const Text('Date is required'),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
@@ -396,12 +396,12 @@ TextField(
     if (!isExpenseFilled && !isIncomeFilled) {
       setState(
         () =>
-            _errorMsg = 'Minimal satu field pengeluaran/pemasukan harus diisi',
+            _errorMsg = 'At least one expense or income field must be filled',
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text(
-            'Minimal satu field pengeluaran/pemasukan harus diisi',
+            'At least one expense or income field must be filled',
           ),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
@@ -420,23 +420,23 @@ TextField(
 
       final expenseModel = ExpenseModel(
         dateId: dateId,
-        pagi: parseCurrencyToInt(_expenseControllers['Pagi']?.text ?? '0'),
-        siang: parseCurrencyToInt(_expenseControllers['Siang']?.text ?? '0'),
-        sore: parseCurrencyToInt(_expenseControllers['Sore']?.text ?? '0'),
-        malam: parseCurrencyToInt(_expenseControllers['Malam']?.text ?? '0'),
-        bensin: parseCurrencyToInt(_expenseControllers['Bensin']?.text ?? '0'),
+        pagi: parseCurrencyToInt(_expenseControllers['Morning']?.text ?? '0'),
+        siang: parseCurrencyToInt(_expenseControllers['Afternoon']?.text ?? '0'),
+        sore: parseCurrencyToInt(_expenseControllers['Evening']?.text ?? '0'),
+        malam: parseCurrencyToInt(_expenseControllers['Night']?.text ?? '0'),
+        bensin: parseCurrencyToInt(_expenseControllers['Fuel']?.text ?? '0'),
       );
       await DbService.insertExpense(expenseModel);
       await DbService().insertHistory(
-        'create_input',
-        'Input berhasil dibuat untuk tanggal $dateStr',
+        'CREATE_INPUT',
+        'Entry success create to date $dateStr',
         DateTime.now().toIso8601String(),
       );
 
 final incomeModel = IncomeModel(
   dateId: dateId,
-  gaji: parseCurrencyToInt(_incomeControllers['Gaji']?.text ?? '0'),
-  lainnya: parseCurrencyToInt(_incomeControllers['Lainnya']?.text ?? '0'),
+  gaji: parseCurrencyToInt(_incomeControllers['Salary']?.text ?? '0'),
+  lainnya: parseCurrencyToInt(_incomeControllers['Others']?.text ?? '0'),
 );
 await DbService.insertIncome(incomeModel);
 
@@ -463,10 +463,10 @@ await DbService.insertIncome(incomeModel);
       );
       await DbService.insertEquity(equityModel);
 
-      _showCustomSnackbar('Data berhasil disimpan!', SnackbarType.success);
+      _showCustomSnackbar('Data saved successfully!', SnackbarType.success);
       _reset();
     } catch (e) {
-      _showCustomSnackbar('Gagal menyimpan data: $e', SnackbarType.error);
+      _showCustomSnackbar('Failed to save data: $e', SnackbarType.error);
     }
   }
 
@@ -494,7 +494,7 @@ await DbService.insertIncome(incomeModel);
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Selesaikan misi harianmu!',
+                        'Complete your daily mission!',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -503,7 +503,7 @@ await DbService.insertIncome(incomeModel);
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Tap tombol di bawah untuk mulai input data harian.',
+                        'Tap the button below to start entering your daily data.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
@@ -512,7 +512,7 @@ await DbService.insertIncome(incomeModel);
                       const SizedBox(height: 32),
                       ElevatedButton.icon(
                         icon: const Icon(Icons.add),
-                        label: const Text('Input Data'),
+                        label: const Text('ENTER DATA'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(
                             context,

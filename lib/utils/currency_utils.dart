@@ -9,16 +9,16 @@ class CurrencyInfo {
 }
 
 final Map<String, CurrencyInfo> expenseCurrency = {
-  'Pagi': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
-  'Siang': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
-  'Sore': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
-  'Malam': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
-  'Bensin': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
+  'Morning': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
+  'Afternoon': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
+  'Evening': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
+  'Night': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
+  'Fuel': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
 };
 
 final Map<String, CurrencyInfo> incomeCurrency = {
-  'Gaji': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
-  'Lainnya': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
+  'Salary': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
+  'Others': CurrencyInfo('IDR', 'Rp. ', 'id_ID'),
 };
 
 String formatCurrency(num value, CurrencyInfo info) {

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// NavigationBar custom yang sepenuhnya adaptif theme dan menggunakan helper dari AppTheme.
-
 class NavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;

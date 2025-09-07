@@ -62,7 +62,7 @@ class _CardPageState extends State<CardPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Tambah Kartu Kredit',
+                    'Add Credit Card',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -73,7 +73,7 @@ class _CardPageState extends State<CardPage> {
                   const SizedBox(height: 24),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Nama Rekening',
+                      labelText: 'Account Name',
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.person),
                       focusedBorder: OutlineInputBorder(
@@ -82,12 +82,12 @@ class _CardPageState extends State<CardPage> {
                     ),
                     onSaved: (val) => namaRek = val,
                     validator: (val) =>
-                        val == null || val.isEmpty ? 'Wajib diisi' : null,
+                        val == null || val.isEmpty ? 'Required' : null,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Nomor Rekening',
+                      labelText: 'Account Number',
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.credit_card),
                       focusedBorder: OutlineInputBorder(
@@ -97,12 +97,12 @@ class _CardPageState extends State<CardPage> {
                     keyboardType: TextInputType.number,
                     onSaved: (val) => noRek = val,
                     validator: (val) =>
-                        val == null || val.isEmpty ? 'Wajib diisi' : null,
+                        val == null || val.isEmpty ? 'Required' : null,
                   ),
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     decoration: InputDecoration(
-                      labelText: 'Brand Bank',
+                      labelText: 'Bank Brand',
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.account_balance),
                       focusedBorder: OutlineInputBorder(
@@ -135,7 +135,7 @@ class _CardPageState extends State<CardPage> {
                       );
                     }).toList(),
                     onChanged: (val) => logoAsset = val,
-                    validator: (val) => val == null ? 'Pilih bank' : null,
+                    validator: (val) => val == null ? 'Select bank' : null,
                   ),
                   const SizedBox(height: 32),
                   Row(
@@ -147,7 +147,7 @@ class _CardPageState extends State<CardPage> {
                             foregroundColor: colorScheme.secondary,
                             side: BorderSide(color: colorScheme.secondary),
                           ),
-                          child: const Text('BATAL'),
+                          child: const Text('CANCEL'),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -163,16 +163,19 @@ class _CardPageState extends State<CardPage> {
                               );
                               await DbService().insertCreditCard(card);
                               await DbService().insertHistory(
-  'create_card',
-  'Card "${card.namaRek}" berhasil dibuat',
+  'CREATE_CARD',
+  'Card "${card.namaRek}" successfully created',
   DateTime.now().toIso8601String(),
 );
+// ignore: use_build_context_synchronously
 ScaffoldMessenger.of(context).showSnackBar(
   SnackBar(
-    content: Text('Card berhasil ditambahkan!'),
+    content: Text('Card successfully added!'),
+    // ignore: use_build_context_synchronously
     backgroundColor: Theme.of(context).colorScheme.primary,
   ),
 );
+                              // ignore: use_build_context_synchronously
                               Navigator.pop(context);
                               _loadCards();
                             }
@@ -181,7 +184,7 @@ ScaffoldMessenger.of(context).showSnackBar(
                             backgroundColor: colorScheme.primary,
                             foregroundColor: Colors.white,
                           ),
-                          child: const Text('SIMPAN'),
+                          child: const Text('SAVE'),
                         ),
                       ),
                     ],
@@ -221,7 +224,7 @@ ScaffoldMessenger.of(context).showSnackBar(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Edit Kartu Kredit',
+                    'Edit Credit Card',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -233,7 +236,7 @@ ScaffoldMessenger.of(context).showSnackBar(
                   TextFormField(
                     initialValue: namaRek,
                     decoration: InputDecoration(
-                      labelText: 'Nama Rekening',
+                      labelText: 'Account Name',
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.person),
                       focusedBorder: OutlineInputBorder(
@@ -242,13 +245,13 @@ ScaffoldMessenger.of(context).showSnackBar(
                     ),
                     onSaved: (val) => namaRek = val,
                     validator: (val) =>
-                        val == null || val.isEmpty ? 'Wajib diisi' : null,
+                        val == null || val.isEmpty ? 'Required' : null,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     initialValue: noRek,
                     decoration: InputDecoration(
-                      labelText: 'Nomor Rekening',
+                      labelText: 'Account Number',
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.credit_card),
                       focusedBorder: OutlineInputBorder(
@@ -258,13 +261,13 @@ ScaffoldMessenger.of(context).showSnackBar(
                     keyboardType: TextInputType.number,
                     onSaved: (val) => noRek = val,
                     validator: (val) =>
-                        val == null || val.isEmpty ? 'Wajib diisi' : null,
+                        val == null || val.isEmpty ? 'Required' : null,
                   ),
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
-                    value: logoAsset,
+                    initialValue: logoAsset,
                     decoration: InputDecoration(
-                      labelText: 'Brand Bank',
+                      labelText: 'Bank Brand',
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.account_balance),
                       focusedBorder: OutlineInputBorder(
@@ -297,7 +300,7 @@ ScaffoldMessenger.of(context).showSnackBar(
                       );
                     }).toList(),
                     onChanged: (val) => logoAsset = val,
-                    validator: (val) => val == null ? 'Pilih bank' : null,
+                    validator: (val) => val == null ? 'Select bank' : null,
                   ),
                   const SizedBox(height: 32),
                   Row(
@@ -309,7 +312,7 @@ ScaffoldMessenger.of(context).showSnackBar(
                             foregroundColor: colorScheme.secondary,
                             side: BorderSide(color: colorScheme.secondary),
                           ),
-                          child: const Text('BATAL'),
+                          child: const Text('CANCEL'),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -326,16 +329,19 @@ ScaffoldMessenger.of(context).showSnackBar(
                               );
                               await DbService().updateCreditCard(updatedCard);
                               await DbService().insertHistory(
-  'update_card',
-  'Card "${updatedCard.namaRek}" berhasil diupdate',
+  'UPDATE_CARD',
+  'Card "${updatedCard.namaRek}" successfully updated',
   DateTime.now().toIso8601String(),
 );
+// ignore: use_build_context_synchronously
 ScaffoldMessenger.of(context).showSnackBar(
   SnackBar(
-    content: Text('Card berhasil diupdate!'),
+    content: Text('Card successfully updated!'),
+    // ignore: use_build_context_synchronously
     backgroundColor: Theme.of(context).colorScheme.primary,
   ),
 );
+                              // ignore: use_build_context_synchronously
                               Navigator.pop(context);
                               _loadCards();
                             }
@@ -361,13 +367,15 @@ ScaffoldMessenger.of(context).showSnackBar(
   Future<void> _deleteCard(int id, dynamic card) async {
     await DbService().deleteCreditCard(id);
     await DbService().insertHistory(
-  'delete_card',
-  'Card "${card.namaRek}" berhasil dihapus',
+  'DELETE_CARD',
+  'Card "${card.namaRek}" successfully deleted',
   DateTime.now().toIso8601String(),
 );
+// ignore: use_build_context_synchronously
 ScaffoldMessenger.of(context).showSnackBar(
   SnackBar(
-    content: Text('Card berhasil dihapus!'),
+    content: Text('Card successfully deleted!'),
+    // ignore: use_build_context_synchronously
     backgroundColor: Theme.of(context).colorScheme.error,
   ),
 );
@@ -385,7 +393,7 @@ ScaffoldMessenger.of(context).showSnackBar(
             children: [
               ElevatedButton.icon(
                 icon: const Icon(Icons.add),
-                label: const Text('Tambah Card'),
+                label: const Text('Add Card'),
                 onPressed: _showAddCardDialog,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,

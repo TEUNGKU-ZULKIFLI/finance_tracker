@@ -54,12 +54,14 @@ class _CardBalanceState extends State<CardBalance> {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
+                // ignore: deprecated_member_use
                 color: colorScheme.primary.withOpacity(0.18),
                 blurRadius: 32,
                 spreadRadius: 2,
                 offset: const Offset(0, 8),
               ),
               BoxShadow(
+                // ignore: deprecated_member_use
                 color: colorScheme.primary.withOpacity(0.08),
                 blurRadius: 8,
                 spreadRadius: 1,
@@ -102,6 +104,7 @@ class _CardBalanceState extends State<CardBalance> {
                     color: colorScheme.primary,
                     shadows: [
                       Shadow(
+                        // ignore: deprecated_member_use
                         color: colorScheme.primary.withOpacity(0.35),
                         blurRadius: 16,
                         offset: const Offset(0, 2),
@@ -117,6 +120,7 @@ class _CardBalanceState extends State<CardBalance> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
+                          // ignore: deprecated_member_use
                           color: colorScheme.expense.withOpacity(0.10),
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -153,6 +157,7 @@ class _CardBalanceState extends State<CardBalance> {
                                 color: colorScheme.expense,
                                 shadows: [
                                   Shadow(
+                                    // ignore: deprecated_member_use
                                     color: Colors.redAccent.withOpacity(0.55),
                                     blurRadius: 16,
                                     offset: Offset(0, 0),
@@ -169,6 +174,7 @@ class _CardBalanceState extends State<CardBalance> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
+                          // ignore: deprecated_member_use
                           color: colorScheme.income.withOpacity(0.10),
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -205,6 +211,7 @@ class _CardBalanceState extends State<CardBalance> {
                                 color: colorScheme.income,
                                 shadows: [
                                   Shadow(
+                                    // ignore: deprecated_member_use
                                     color: Colors.greenAccent.withOpacity(0.55),
                                     blurRadius: 16,
                                     offset: Offset(0, 0),

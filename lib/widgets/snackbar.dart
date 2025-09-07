@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Snackbar custom yang sepenuhnya adaptif theme dan menggunakan ColorScheme dari Theme.of(context).
-
 class Snackbar extends StatelessWidget {
   final String message;
   final SnackbarType type;
