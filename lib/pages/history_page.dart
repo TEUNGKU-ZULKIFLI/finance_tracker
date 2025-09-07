@@ -11,7 +11,8 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   List<UserHistoryModel> historyList = [];
-  String? filterAction;
+  String sortBy = 'timestamp'; // default sort by date
+  bool desc = true; // default descending
 
   @override
   void initState() {
@@ -20,7 +21,7 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Future<void> _loadHistory() async {
-    historyList = await DbService().getHistory();
+    historyList = await DbService().getHistorySorted(sortBy: sortBy, desc: desc);
     setState(() {});
   }
 
@@ -28,15 +29,15 @@ class _HistoryPageState extends State<HistoryPage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Hapus Semua History?'),
-        content: const Text('Data history akan dihapus permanen.'),
+        title: const Text('Delete All History?'),
+        content: const Text('History data will be permanently deleted.'),
         actions: [
           TextButton(
-            child: const Text('Batal'),
+            child: const Text('Cancel'),
             onPressed: () => Navigator.pop(context, false),
           ),
           ElevatedButton(
-            child: const Text('Hapus'),
+            child: const Text('Delete'),
             onPressed: () => Navigator.pop(context, true),
           ),
         ],
@@ -45,28 +46,18 @@ class _HistoryPageState extends State<HistoryPage> {
     if (confirm == true) {
       await DbService().clearHistory();
       _loadHistory();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('History berhasil dihapus')),
-      );
+      if (context.mounted) {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('History successfully deleted')),
+        );
+      }
     }
-  }
-
-  List<UserHistoryModel> get filteredHistory {
-    if (filterAction == null || filterAction == 'ALL') return historyList;
-    return historyList.where((h) => h.action == filterAction).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final actions = [
-      'ALL',
-      'create_input',
-      'delete_input',
-      'create_card',
-      'update_card',
-      'delete_card',
-    ];
     return Scaffold(
       body: Column(
         children: [
@@ -88,23 +79,37 @@ class _HistoryPageState extends State<HistoryPage> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: filterAction ?? 'ALL',
+                    initialValue: sortBy,
                     decoration: const InputDecoration(
-                      labelText: 'Filter Aksi',
+                      labelText: 'Sort By',
                       border: OutlineInputBorder(),
                     ),
-                    items: actions.map((act) {
-                      return DropdownMenuItem(
-                        value: act,
-                        child: Text(act == 'ALL' ? 'Semua' : act),
-                      );
-                    }).toList(),
+                    items: [
+                      DropdownMenuItem(value: 'timestamp', child: Text('Date')),
+                      DropdownMenuItem(value: 'desc', child: Text('Name')),
+                      DropdownMenuItem(value: 'action', child: Text('Type')),
+                    ],
                     onChanged: (val) {
                       setState(() {
-                        filterAction = val;
+                        sortBy = val!;
+                        _loadHistory();
                       });
                     },
                   ),
+                ),
+                const SizedBox(width: 12),
+                DropdownButton<bool>(
+                  value: desc,
+                  items: [
+                    DropdownMenuItem(value: true, child: Text('DESC')),
+                    DropdownMenuItem(value: false, child: Text('ASC')),
+                  ],
+                  onChanged: (val) {
+                    setState(() {
+                      desc = val!;
+                      _loadHistory();
+                    });
+                  },
                 ),
                 const SizedBox(width: 12),
                 IconButton(
@@ -116,12 +121,12 @@ class _HistoryPageState extends State<HistoryPage> {
             ),
           ),
           Expanded(
-            child: filteredHistory.isEmpty
-                ? const Center(child: Text('Belum ada history'))
+            child: historyList.isEmpty
+                ? const Center(child: Text('No history available'))
                 : ListView.builder(
-                    itemCount: filteredHistory.length,
+                    itemCount: historyList.length,
                     itemBuilder: (context, index) {
-                      final h = filteredHistory[index];
+                      final h = historyList[index];
                       return ListTile(
                         leading: Icon(
                           _getIcon(h.action),
@@ -150,15 +155,15 @@ class _HistoryPageState extends State<HistoryPage> {
 
   IconData _getIcon(String action) {
     switch (action) {
-      case 'create_input':
+      case 'CREATE_INPUT':
         return Icons.add_circle_outline;
-      case 'delete_input':
+      case 'DELETE_INPUT':
         return Icons.remove_circle_outline;
-      case 'create_card':
+      case 'CREATE_CARD':
         return Icons.credit_card;
-      case 'update_card':
+      case 'UPDATE_CARD':
         return Icons.edit;
-      case 'delete_card':
+      case 'DELETE_CARD':
         return Icons.delete;
       default:
         return Icons.history;

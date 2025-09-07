@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'dart:io';
 import '../models/date_model.dart';
@@ -127,6 +128,19 @@ class DbService {
 Future<List<UserHistoryModel>> getHistory() async {
   final db = await database;
   final res = await db.query('user_history', orderBy: 'timestamp DESC');
+  return res.map((e) => UserHistoryModel.fromMap(e)).toList();
+}
+
+Future<List<UserHistoryModel>> getHistorySorted({
+  String sortBy = 'timestamp',
+  bool desc = true,
+}) async {
+  final db = await database;
+  final order = desc ? 'DESC' : 'ASC';
+  final res = await db.query(
+    'user_history',
+    orderBy: '$sortBy $order',
+  );
   return res.map((e) => UserHistoryModel.fromMap(e)).toList();
 }
 

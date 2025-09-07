@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finance_tracker/services/db_service.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -49,14 +50,12 @@ class _SettingPageState extends State<SettingPage> {
             },
           ),
           const Divider(),
-          _buildListTile(
-            icon: Icons.warning,
-            iconColor: Colors.orange,
-            title: 'Delete All Data Input',
-            onTap: () {
-              // TODO: Implement delete all data input
-            },
-          ),
+_buildListTile(
+  icon: Icons.warning,
+  iconColor: Colors.orange,
+  title: 'Delete All Data Input',
+  onTap: () => _confirmDeleteAll(context),
+),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.info_outline),
@@ -118,6 +117,7 @@ class _SettingPageState extends State<SettingPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
               ),
+              // ignore: deprecated_member_use
               backgroundColor: colorScheme.surface.withOpacity(0.98),
               elevation: 16,
               contentPadding: const EdgeInsets.symmetric(
@@ -140,6 +140,7 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                       boxShadow: [
                         BoxShadow(
+                          // ignore: deprecated_member_use
                           color: colorScheme.primary.withOpacity(0.25),
                           blurRadius: 16,
                           offset: const Offset(0, 8),
@@ -163,6 +164,7 @@ class _SettingPageState extends State<SettingPage> {
                       letterSpacing: 1.5,
                       shadows: [
                         Shadow(
+                          // ignore: deprecated_member_use
                           color: colorScheme.primary.withOpacity(0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
@@ -174,6 +176,7 @@ class _SettingPageState extends State<SettingPage> {
                   const SizedBox(height: 10),
                   Divider(
                     thickness: 1.2,
+                    // ignore: deprecated_member_use
                     color: colorScheme.primary.withOpacity(0.18),
                     indent: 24,
                     endIndent: 24,
@@ -210,7 +213,7 @@ class _SettingPageState extends State<SettingPage> {
               actions: [
                 TextButton(
                   child: Text(
-                    'Tutup',
+                    'CLOSE',
                     style: TextStyle(
                       color: colorScheme.primary,
                       fontWeight: FontWeight.bold,
@@ -226,4 +229,38 @@ class _SettingPageState extends State<SettingPage> {
       },
     );
   }
+
+  Future<void> _confirmDeleteAll(BuildContext context) async {
+  final colorScheme = Theme.of(context).colorScheme;
+  final result = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: const Text('Delete All Data'),
+      content: const Text('Are you sure you want to delete all input data? This action cannot be undone.'),
+      actions: [
+        TextButton(
+          child: Text('Cancel', style: TextStyle(color: colorScheme.secondary)),
+          onPressed: () => Navigator.of(ctx).pop(false),
+        ),
+        TextButton(
+          child: Text('Delete', style: TextStyle(color: colorScheme.error)),
+          onPressed: () => Navigator.of(ctx).pop(true),
+        ),
+      ],
+    ),
+  );
+  if (result == true) {
+    await DbService.clearAll();
+      await DbService().insertHistory(
+    'DELETE_INPUT',
+    'All input data deleted',
+    DateTime.now().toIso8601String(),
+  );
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('All input data deleted successfully!')),
+      );
+    }
+  }
+}
 }
