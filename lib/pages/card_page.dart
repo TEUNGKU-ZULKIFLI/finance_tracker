@@ -162,6 +162,17 @@ class _CardPageState extends State<CardPage> {
                                 logoAsset: logoAsset!,
                               );
                               await DbService().insertCreditCard(card);
+                              await DbService().insertHistory(
+  'create_card',
+  'Card "${card.namaRek}" berhasil dibuat',
+  DateTime.now().toIso8601String(),
+);
+ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text('Card berhasil ditambahkan!'),
+    backgroundColor: Theme.of(context).colorScheme.primary,
+  ),
+);
                               Navigator.pop(context);
                               _loadCards();
                             }
@@ -314,6 +325,17 @@ class _CardPageState extends State<CardPage> {
                                 logoAsset: logoAsset!,
                               );
                               await DbService().updateCreditCard(updatedCard);
+                              await DbService().insertHistory(
+  'update_card',
+  'Card "${updatedCard.namaRek}" berhasil diupdate',
+  DateTime.now().toIso8601String(),
+);
+ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text('Card berhasil diupdate!'),
+    backgroundColor: Theme.of(context).colorScheme.primary,
+  ),
+);
                               Navigator.pop(context);
                               _loadCards();
                             }
@@ -336,8 +358,19 @@ class _CardPageState extends State<CardPage> {
     );
   }
 
-  Future<void> _deleteCard(int id) async {
+  Future<void> _deleteCard(int id, dynamic card) async {
     await DbService().deleteCreditCard(id);
+    await DbService().insertHistory(
+  'delete_card',
+  'Card "${card.namaRek}" berhasil dihapus',
+  DateTime.now().toIso8601String(),
+);
+ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text('Card berhasil dihapus!'),
+    backgroundColor: Theme.of(context).colorScheme.error,
+  ),
+);
     _loadCards();
   }
 
@@ -382,7 +415,7 @@ class _CardPageState extends State<CardPage> {
                   namaRek: card.namaRek,
                   noRek: card.noRek,
                   logoAsset: 'assets/bank/${card.logoAsset}',
-                  onDelete: () => _deleteCard(card.id!),
+                  onDelete: () => _deleteCard(card.id!, card),
                   onEdit: () => _showEditCardDialog(card),
                 ),
               );

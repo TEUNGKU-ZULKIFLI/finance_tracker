@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:finance_tracker/services/db_service.dart';
+import 'package:finance_tracker/models/user_history_model.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -9,104 +10,158 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  List<Map<String, dynamic>> dates = [];
-  List<Map<String, dynamic>> expenses = [];
-  List<Map<String, dynamic>> income = [];
-  List<Map<String, dynamic>> balance = [];
-  List<Map<String, dynamic>> equity = [];
-  bool loading = true;
+  List<UserHistoryModel> historyList = [];
+  String? filterAction;
 
   @override
   void initState() {
     super.initState();
-    _loadAllData();
+    _loadHistory();
   }
 
-  Future<void> _loadAllData() async {
-    final db = await DbService.database;
-    dates = await db.query('dates', orderBy: 'date DESC');
-    expenses = await db.query('expenses');
-    income = await db.query('income');
-    balance = await db.query('balance');
-  equity = await db.query('equity');
-    setState(() {
-      loading = false;
-    });
+  Future<void> _loadHistory() async {
+    historyList = await DbService().getHistory();
+    setState(() {});
+  }
+
+  Future<void> _deleteAllHistory() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Hapus Semua History?'),
+        content: const Text('Data history akan dihapus permanen.'),
+        actions: [
+          TextButton(
+            child: const Text('Batal'),
+            onPressed: () => Navigator.pop(context, false),
+          ),
+          ElevatedButton(
+            child: const Text('Hapus'),
+            onPressed: () => Navigator.pop(context, true),
+          ),
+        ],
+      ),
+    );
+    if (confirm == true) {
+      await DbService().clearHistory();
+      _loadHistory();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('History berhasil dihapus')),
+      );
+    }
+  }
+
+  List<UserHistoryModel> get filteredHistory {
+    if (filterAction == null || filterAction == 'ALL') return historyList;
+    return historyList.where((h) => h.action == filterAction).toList();
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final actions = [
+      'ALL',
+      'create_input',
+      'delete_input',
+      'create_card',
+      'update_card',
+      'delete_card',
+    ];
     return Scaffold(
-      body: loading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Tabel dates', style: TextStyle(fontWeight: FontWeight.bold)),
-                    ...dates.map((d) => Text('id: ${d['id']}, date: ${d['date']}')).toList(),
-                    const SizedBox(height: 16),
-                    const Text('Tabel expenses', style: TextStyle(fontWeight: FontWeight.bold)),
-                    ...expenses.map((e) => Text(
-                      'id: ${e['id']}, date_id: ${e['date_id']}, pagi: ${e['pagi']}, siang: ${e['siang']}, sore: ${e['sore']}, malam: ${e['malam']}, bensin: ${e['bensin']}'
-                    )).toList(),
-                    const SizedBox(height: 16),
-                    const Text('Tabel income', style: TextStyle(fontWeight: FontWeight.bold)),
-                    ...income.map((i) => Text(
-                      'id: ${i['id']}, date_id: ${i['date_id']}, gaji: ${i['gaji']}, lainnya: ${i['lainnya']}, currency: ${i['currency']}'
-                    )).toList(),
-                    const SizedBox(height: 16),
-                    const Text('Tabel equity', style: TextStyle(fontWeight: FontWeight.bold)),
-                    ...equity.map((e) => Text(
-                      'id: ${e['id']}, date_id: ${e['date_id']}, expense_estimation: ${e['expense_estimation']}, income_estimation: ${e['income_estimation']}, estimation_balance: ${e['estimation_balance']}'
-                    )).toList(),
-                    const SizedBox(height: 16),
-                    const Text('Tabel balance', style: TextStyle(fontWeight: FontWeight.bold)),
-                    ...balance.map((s) => Text('id: ${s['id']}, date_id: ${s['date_id']}, balance: ${s['balance']}')).toList(),
-                    const SizedBox(height: 32),
-                    Center(
-                      child: ElevatedButton.icon(
-                        icon: const Icon(Icons.delete_forever),
-                        label: const Text('Reset Data'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                        ),
-                        onPressed: () async {
-                          final confirm = await showDialog<bool>(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              title: const Text('Konfirmasi Reset'),
-                              content: const Text('Hapus semua data? Tindakan ini tidak bisa dibatalkan.'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(ctx).pop(false),
-                                  child: const Text('Batal'),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () => Navigator.of(ctx).pop(true),
-                                  child: const Text('Hapus'),
-                                ),
-                              ],
-                            ),
-                          );
-                          if (confirm == true) {
-                            setState(() => loading = true);
-                            await DbService.clearAll();
-                            await _loadAllData();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Semua data berhasil direset')),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+      body: Column(
+        children: [
+          const SizedBox(height: 24),
+          Center(
+            child: Text(
+              'HISTORY',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: colorScheme.primary,
+                letterSpacing: 1.2,
               ),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: filterAction ?? 'ALL',
+                    decoration: const InputDecoration(
+                      labelText: 'Filter Aksi',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: actions.map((act) {
+                      return DropdownMenuItem(
+                        value: act,
+                        child: Text(act == 'ALL' ? 'Semua' : act),
+                      );
+                    }).toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        filterAction = val;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                IconButton(
+                  icon: Icon(Icons.delete_forever, color: colorScheme.error),
+                  tooltip: 'Delete All History',
+                  onPressed: _deleteAllHistory,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: filteredHistory.isEmpty
+                ? const Center(child: Text('Belum ada history'))
+                : ListView.builder(
+                    itemCount: filteredHistory.length,
+                    itemBuilder: (context, index) {
+                      final h = filteredHistory[index];
+                      return ListTile(
+                        leading: Icon(
+                          _getIcon(h.action),
+                          color: colorScheme.primary,
+                        ),
+                        title: Text(h.desc),
+                        subtitle: Text(
+                          h.timestamp.replaceFirst('T', ' ').substring(0, 19),
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        trailing: Text(
+                          h.action.replaceAll('_', ' '),
+                          style: TextStyle(
+                            color: colorScheme.secondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
     );
+  }
+
+  IconData _getIcon(String action) {
+    switch (action) {
+      case 'create_input':
+        return Icons.add_circle_outline;
+      case 'delete_input':
+        return Icons.remove_circle_outline;
+      case 'create_card':
+        return Icons.credit_card;
+      case 'update_card':
+        return Icons.edit;
+      case 'delete_card':
+        return Icons.delete;
+      default:
+        return Icons.history;
+    }
   }
 }

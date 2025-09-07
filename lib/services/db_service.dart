@@ -5,6 +5,7 @@ import '../models/date_model.dart';
 import '../models/expense_model.dart';
 import '../models/income_model.dart';
 import '../models/balance_model.dart';
+import '../models/user_history_model.dart';
 import '../models/equity_model.dart';
 import '../models/credit_card_model.dart';
 
@@ -44,6 +45,14 @@ class DbService {
       path,
       version: 1,
       onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE user_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            action TEXT,
+            desc TEXT,
+            timestamp TEXT
+          );
+        ''');
         await db.execute('''
           CREATE TABLE credit_card (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -100,6 +109,31 @@ class DbService {
           ''');
       },
     );
+  }
+
+  // Tambahkan fungsi insert, get, dan clear history
+  Future<int> insertHistory(
+    String action,
+    String desc,
+    String timestamp,
+  ) async {
+    final db = await database;
+    return await db.insert('user_history', {
+      'action': action,
+      'desc': desc,
+      'timestamp': timestamp,
+    });
+  }
+
+Future<List<UserHistoryModel>> getHistory() async {
+  final db = await database;
+  final res = await db.query('user_history', orderBy: 'timestamp DESC');
+  return res.map((e) => UserHistoryModel.fromMap(e)).toList();
+}
+
+  Future<int> clearHistory() async {
+    final db = await database;
+    return await db.delete('user_history');
   }
 
   // Insert Credit Card

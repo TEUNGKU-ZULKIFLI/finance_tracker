@@ -34,7 +34,7 @@ class _SettingPageState extends State<SettingPage> {
               'SETTING',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 22,
+                fontSize: 25,
                 color: colorScheme.primary,
                 letterSpacing: 1.2,
               ),
@@ -49,14 +49,6 @@ class _SettingPageState extends State<SettingPage> {
             },
           ),
           const Divider(),
-          _buildListTile(
-            icon: Icons.delete_forever,
-            iconColor: Colors.red,
-            title: 'Delete All History',
-            onTap: () {
-              // TODO: Implement delete all history
-            },
-          ),
           _buildListTile(
             icon: Icons.warning,
             iconColor: Colors.orange,

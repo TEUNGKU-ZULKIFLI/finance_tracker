@@ -443,6 +443,11 @@ class _InputPageState extends State<InputPage> {
         bensin: parseCurrencyToInt(_expenseControllers['Bensin']?.text ?? '0'),
       );
       await DbService.insertExpense(expenseModel);
+      await DbService().insertHistory(
+        'create_input',
+        'Input berhasil dibuat untuk tanggal $dateStr',
+        DateTime.now().toIso8601String(),
+      );
 
       final incomeModel = IncomeModel(
         dateId: dateId,
