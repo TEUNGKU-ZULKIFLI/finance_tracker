@@ -17,22 +17,6 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  OverlayEntry? _snackbarEntry;
-
-  void _showCustomSnackbar(String message, SnackbarType type) {
-    _snackbarEntry?.remove();
-    _snackbarEntry = OverlayEntry(
-      builder: (ctx) => Positioned(
-        bottom: 80,
-        left: 0,
-        right: 0,
-        child: Snackbar(message: message, type: type),
-      ),
-    );
-    Overlay.of(context).insert(_snackbarEntry!);
-    Future.delayed(const Duration(seconds: 3), () => _snackbarEntry?.remove());
-  }
-
   int _step = 0;
   final _dateController = TextEditingController();
   final Map<String, TextEditingController> _expenseControllers = {
@@ -48,6 +32,31 @@ class _InputPageState extends State<InputPage> {
   };
   String? _errorMsg;
 
+  void _showCustomSnackbar(String message, SnackbarType type) {
+    final colorScheme = Theme.of(context).colorScheme;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              type == SnackbarType.success ? Icons.check_circle : Icons.error,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: Text(message)),
+          ],
+        ),
+        backgroundColor: type == SnackbarType.success
+            ? colorScheme.primary
+            : colorScheme.error,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
   void _reset() {
     setState(() {
       _step = 0;
@@ -59,12 +68,13 @@ class _InputPageState extends State<InputPage> {
   }
 
   Widget _buildStepper() {
+    final colorScheme = Theme.of(context).colorScheme;
     // Step 1: Input Date
     if (_step == 1) {
       return Card(
         elevation: 8,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        color: Theme.of(context).colorScheme.surface,
+        color: colorScheme.surface,
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
@@ -73,18 +83,14 @@ class _InputPageState extends State<InputPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.calendar_today,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 22,
-                  ),
+                  Icon(Icons.calendar_today, color: colorScheme.primary, size: 22),
                   const SizedBox(width: 8),
                   Text(
                     'DATE',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: colorScheme.primary,
                       letterSpacing: 2,
                     ),
                   ),
@@ -98,9 +104,7 @@ class _InputPageState extends State<InputPage> {
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.calendar_today),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                    borderSide: BorderSide(color: colorScheme.primary),
                   ),
                 ),
                 readOnly: true,
@@ -124,12 +128,8 @@ class _InputPageState extends State<InputPage> {
                     child: OutlinedButton(
                       onPressed: _reset,
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Theme.of(
-                          context,
-                        ).colorScheme.secondary,
-                        side: BorderSide(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
+                        foregroundColor: colorScheme.secondary,
+                        side: BorderSide(color: colorScheme.secondary),
                       ),
                       child: const Text('CANCEL'),
                     ),
@@ -139,7 +139,7 @@ class _InputPageState extends State<InputPage> {
                     child: ElevatedButton(
                       onPressed: () => setState(() => _step = 2),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        backgroundColor: colorScheme.primary,
                         foregroundColor: Colors.white,
                       ),
                       child: const Text('NEXT'),
@@ -149,10 +149,7 @@ class _InputPageState extends State<InputPage> {
               ),
               if (_errorMsg != null) ...[
                 const SizedBox(height: 4),
-                Text(
-                  _errorMsg!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
+                Text(_errorMsg!, style: TextStyle(color: colorScheme.error)),
               ],
             ],
           ),
@@ -164,7 +161,7 @@ class _InputPageState extends State<InputPage> {
       return Card(
         elevation: 8,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        color: Theme.of(context).colorScheme.surface,
+        color: colorScheme.surface,
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
@@ -173,18 +170,14 @@ class _InputPageState extends State<InputPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.arrow_circle_down_rounded,
-                    color: Theme.of(context).colorScheme.expense,
-                    size: 22,
-                  ),
+                  Icon(Icons.arrow_circle_down_rounded, color: colorScheme.expense, size: 22),
                   const SizedBox(width: 8),
                   Text(
                     'EXPENSE',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.expense,
+                      color: colorScheme.expense,
                       letterSpacing: 2,
                     ),
                   ),
@@ -201,9 +194,7 @@ class _InputPageState extends State<InputPage> {
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.money_off),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                        borderSide: BorderSide(color: colorScheme.primary),
                       ),
                     ),
                     keyboardType: TextInputType.number,
@@ -222,12 +213,8 @@ class _InputPageState extends State<InputPage> {
                     child: OutlinedButton(
                       onPressed: () => setState(() => _step = 1),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Theme.of(
-                          context,
-                        ).colorScheme.secondary,
-                        side: BorderSide(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
+                        foregroundColor: colorScheme.secondary,
+                        side: BorderSide(color: colorScheme.secondary),
                       ),
                       child: const Text('BACK'),
                     ),
@@ -237,7 +224,7 @@ class _InputPageState extends State<InputPage> {
                     child: ElevatedButton(
                       onPressed: () => setState(() => _step = 3),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        backgroundColor: colorScheme.primary,
                         foregroundColor: Colors.white,
                       ),
                       child: const Text('NEXT'),
@@ -247,10 +234,7 @@ class _InputPageState extends State<InputPage> {
               ),
               if (_errorMsg != null) ...[
                 const SizedBox(height: 4),
-                Text(
-                  _errorMsg!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
+                Text(_errorMsg!, style: TextStyle(color: colorScheme.error)),
               ],
             ],
           ),
@@ -262,7 +246,7 @@ class _InputPageState extends State<InputPage> {
       return Card(
         elevation: 8,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        color: Theme.of(context).colorScheme.surface,
+        color: colorScheme.surface,
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
@@ -271,18 +255,14 @@ class _InputPageState extends State<InputPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.arrow_circle_up_rounded,
-                    color: Theme.of(context).colorScheme.income,
-                    size: 22,
-                  ),
+                  Icon(Icons.arrow_circle_up_rounded, color: colorScheme.income, size: 22),
                   const SizedBox(width: 8),
                   Text(
                     'INCOME',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.income,
+                      color: colorScheme.income,
                       letterSpacing: 2,
                     ),
                   ),
@@ -296,9 +276,7 @@ class _InputPageState extends State<InputPage> {
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.attach_money),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                    borderSide: BorderSide(color: colorScheme.primary),
                   ),
                 ),
                 keyboardType: TextInputType.number,
@@ -309,23 +287,19 @@ class _InputPageState extends State<InputPage> {
                 ],
               ),
               const SizedBox(height: 12),
-TextField(
-  controller: _incomeControllers['Others'],
-  decoration: InputDecoration(
-    labelText: 'Others',
-    border: const OutlineInputBorder(),
-    prefixIcon: const Icon(Icons.money),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Theme.of(context).colorScheme.primary,
-      ),
-    ),
-  ),
-  keyboardType: TextInputType.number,
-  inputFormatters: [
-    CurrencyInputFormatter(defaultCurrencyInfo),
-  ],
-),
+              TextField(
+                controller: _incomeControllers['Others'],
+                decoration: InputDecoration(
+                  labelText: 'Others',
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.money),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: colorScheme.primary),
+                  ),
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [CurrencyInputFormatter(defaultCurrencyInfo)],
+              ),
               const SizedBox(height: 5),
               Row(
                 children: [
@@ -333,12 +307,8 @@ TextField(
                     child: OutlinedButton(
                       onPressed: () => setState(() => _step = 2),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Theme.of(
-                          context,
-                        ).colorScheme.secondary,
-                        side: BorderSide(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
+                        foregroundColor: colorScheme.secondary,
+                        side: BorderSide(color: colorScheme.secondary),
                       ),
                       child: const Text('BACK'),
                     ),
@@ -348,7 +318,7 @@ TextField(
                     child: ElevatedButton(
                       onPressed: _handleSave,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        backgroundColor: colorScheme.primary,
                         foregroundColor: Colors.white,
                       ),
                       child: const Text('SAVE'),
@@ -358,10 +328,7 @@ TextField(
               ),
               if (_errorMsg != null) ...[
                 const SizedBox(height: 4),
-                Text(
-                  _errorMsg!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
+                Text(_errorMsg!, style: TextStyle(color: colorScheme.error)),
               ],
             ],
           ),
@@ -380,20 +347,13 @@ TextField(
       return;
     }
     // Validasi minimal satu field expense/income terisi
-    final expenseValues = _expenseControllers.values
-        .map((c) => c.text.trim())
-        .toList();
-    final incomeValues = _incomeControllers.values
-        .map((c) => c.text.trim())
-        .toList();
+    final expenseValues = _expenseControllers.values.map((c) => c.text.trim()).toList();
+    final incomeValues = _incomeControllers.values.map((c) => c.text.trim()).toList();
     final isExpenseFilled = expenseValues.any((v) => v.isNotEmpty && v != '0');
     final isIncomeFilled = incomeValues.any((v) => v.isNotEmpty && v != '0');
     if (!isExpenseFilled && !isIncomeFilled) {
-      setState(
-        () =>
-            _errorMsg = 'At least one expense or income field must be filled',
-      );
-      _showCustomSnackbar(_errorMsg!, SnackbarType.error);
+      setState(() => _errorMsg = 'At least one expense or income field must be filled');
+      _showCustomSnackbar('At least one expense or income field must be filled', SnackbarType.error);
       return;
     }
     try {
@@ -421,17 +381,16 @@ TextField(
         DateTime.now().toIso8601String(),
       );
 
-final incomeModel = IncomeModel(
-  dateId: dateId,
-  gaji: parseCurrencyToInt(_incomeControllers['Salary']?.text ?? '0'),
-  lainnya: parseCurrencyToInt(_incomeControllers['Others']?.text ?? '0'),
-);
-await DbService.insertIncome(incomeModel);
+      final incomeModel = IncomeModel(
+        dateId: dateId,
+        gaji: parseCurrencyToInt(_incomeControllers['Salary']?.text ?? '0'),
+        lainnya: parseCurrencyToInt(_incomeControllers['Others']?.text ?? '0'),
+      );
+      await DbService.insertIncome(incomeModel);
 
       // Hitung balance
       final totalIncome = incomeModel.gaji + incomeModel.lainnya;
-      final totalExpense =
-          expenseModel.pagi +
+      final totalExpense = expenseModel.pagi +
           expenseModel.siang +
           expenseModel.sore +
           expenseModel.malam +
@@ -459,7 +418,16 @@ await DbService.insertIncome(incomeModel);
   }
 
   @override
+  void dispose() {
+    _dateController.dispose();
+    _expenseControllers.forEach((_, c) => c.dispose());
+    _incomeControllers.forEach((_, c) => c.dispose());
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -469,42 +437,34 @@ await DbService.insertIncome(incomeModel);
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                color: Theme.of(context).colorScheme.surface,
+                color: colorScheme.surface,
                 child: Padding(
                   padding: const EdgeInsets.all(32),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.flag,
-                        size: 56,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                      Icon(Icons.flag, size: 56, color: colorScheme.primary),
                       const SizedBox(height: 16),
                       Text(
                         'Complete your daily mission!',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: colorScheme.primary,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'Tap the button below to start entering your daily data.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
+                        style: TextStyle(color: colorScheme.secondary),
                       ),
                       const SizedBox(height: 32),
                       ElevatedButton.icon(
                         icon: const Icon(Icons.add),
                         label: const Text('ENTER DATA'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(
-                            context,
-                          ).colorScheme.primary,
+                          backgroundColor: colorScheme.primary,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),

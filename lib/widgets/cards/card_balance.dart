@@ -34,17 +34,23 @@ class _CardBalanceState extends State<CardBalance> {
       'SELECT SUM(estimation_balance) as total FROM equity',
     );
 
-    expenseEstimation = (expenseSumRes.first['total'] as int?) ?? 0;
-    incomeEstimation = (incomeSumRes.first['total'] as int?) ?? 0;
-    estimationBalance = (balanceSumRes.first['total'] as int?) ?? 0;
+    if (!mounted) return;
 
-    setState(() => loading = false);
+    setState(() {
+      expenseEstimation = (expenseSumRes.first['total'] as int?) ?? 0;
+      incomeEstimation = (incomeSumRes.first['total'] as int?) ?? 0;
+      estimationBalance = (balanceSumRes.first['total'] as int?) ?? 0;
+      loading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (loading) return const Center(child: CircularProgressIndicator());
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    if (loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
@@ -85,8 +91,7 @@ class _CardBalanceState extends State<CardBalance> {
                     const SizedBox(width: 8),
                     Text(
                       'BALANCE',
-                      style: TextStyle(
-                        fontSize: 16,
+                      style: textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: colorScheme.primary,
                         letterSpacing: 2,
@@ -98,8 +103,7 @@ class _CardBalanceState extends State<CardBalance> {
                 Text(
                   formatCurrency(estimationBalance, defaultCurrencyInfo),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28,
+                  style: textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
                     shadows: [
@@ -137,7 +141,7 @@ class _CardBalanceState extends State<CardBalance> {
                                 const SizedBox(width: 4),
                                 Text(
                                   'EXPENSE',
-                                  style: TextStyle(
+                                  style: textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: colorScheme.expense,
                                     fontSize: 13,
@@ -147,12 +151,8 @@ class _CardBalanceState extends State<CardBalance> {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              formatCurrency(
-                                expenseEstimation,
-                                defaultCurrencyInfo,
-                              ),
-                              style: TextStyle(
-                                fontSize: 15,
+                              formatCurrency(expenseEstimation, defaultCurrencyInfo),
+                              style: textTheme.bodyLarge?.copyWith(
                                 fontWeight: FontWeight.w600,
                                 color: colorScheme.expense,
                                 shadows: [
@@ -191,7 +191,7 @@ class _CardBalanceState extends State<CardBalance> {
                                 const SizedBox(width: 4),
                                 Text(
                                   'INCOME',
-                                  style: TextStyle(
+                                  style: textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: colorScheme.income,
                                     fontSize: 13,
@@ -201,12 +201,8 @@ class _CardBalanceState extends State<CardBalance> {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              formatCurrency(
-                                incomeEstimation,
-                                defaultCurrencyInfo,
-                              ),
-                              style: TextStyle(
-                                fontSize: 15,
+                              formatCurrency(incomeEstimation, defaultCurrencyInfo),
+                              style: textTheme.bodyLarge?.copyWith(
                                 fontWeight: FontWeight.w600,
                                 color: colorScheme.income,
                                 shadows: [

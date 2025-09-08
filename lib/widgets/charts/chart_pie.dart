@@ -9,18 +9,18 @@ class ChartPie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primer = (balance * 0.5).round();
-    final sekunder = (balance * 0.3).round();
-    final tersier = (balance * 0.2).round();
-
-    final total = primer + sekunder + tersier;
+    // Distribusi balance ke 3 kategori
+    final primaryValue = (balance * 0.5).round();
+    final secondaryValue = (balance * 0.3).round();
+    final tertiaryValue = (balance * 0.2).round();
+    final totalValue = primaryValue + secondaryValue + tertiaryValue;
 
     final colorScheme = Theme.of(context).colorScheme;
 
     final pieData = [
-      {'label': 'Primary', 'value': primer, 'color': colorScheme.primer},
-      {'label': 'Secondary', 'value': sekunder, 'color': colorScheme.sekunder},
-      {'label': 'Tertiary', 'value': tersier, 'color': colorScheme.tersier},
+      {'label': 'Primary', 'value': primaryValue, 'color': colorScheme.primer},
+      {'label': 'Secondary', 'value': secondaryValue, 'color': colorScheme.sekunder},
+      {'label': 'Tertiary', 'value': tertiaryValue, 'color': colorScheme.tersier},
     ];
 
     return Card(
@@ -37,7 +37,7 @@ class ChartPie extends StatelessWidget {
               "NEEDS DISTRIBUTION",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
+                color: colorScheme.primary,
               ),
             ),
             const SizedBox(height: 12),
@@ -57,7 +57,7 @@ class ChartPie extends StatelessWidget {
                         formatCurrency(balance, defaultCurrencyInfo),
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSurface,
+                          color: colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -65,7 +65,7 @@ class ChartPie extends StatelessWidget {
                         "Total Balance",
                         style: TextStyle(
                           fontSize: 13,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -77,8 +77,8 @@ class ChartPie extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: pieData.map((data) {
-                final percent = total > 0
-                    ? ((data['value'] as int) / total * 100).toStringAsFixed(1)
+                final percent = totalValue > 0
+                    ? ((data['value'] as int) / totalValue * 100).toStringAsFixed(1)
                     : "0";
                 return Expanded(
                   child: Container(
@@ -119,14 +119,14 @@ class ChartPie extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSurface,
+                            color: colorScheme.onSurface,
                           ),
                         ),
                         Text(
                           "$percent%",
                           style: TextStyle(
                             fontSize: 13,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color: colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],

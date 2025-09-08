@@ -12,6 +12,7 @@ class ChartPage extends StatefulWidget {
 
 class _ChartPageState extends State<ChartPage> {
   List<Map<String, dynamic>> weeklyData = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -20,9 +21,11 @@ class _ChartPageState extends State<ChartPage> {
   }
 
   Future<void> loadData() async {
+    setState(() => isLoading = true);
     final equityList = await DbService.getAllEquity();
     setState(() {
       weeklyData = groupEquityByWeek(equityList);
+      isLoading = false;
     });
   }
 
@@ -48,9 +51,26 @@ class _ChartPageState extends State<ChartPage> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                weeklyData.isEmpty
-                    ? const Center(child: CircularProgressIndicator())
-                    : ChartWeekly(weeklyData: weeklyData),
+                if (isLoading)
+                  SizedBox(
+                    height: 220,
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else if (weeklyData.isEmpty)
+                  SizedBox(
+                    height: 220,
+                    child: Center(
+                      child: Text(
+                        'No data yet.\nPlease input your finance data.',
+                        textAlign: TextAlign.center,
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.secondary,
+                        ),
+                      ),
+                    ),
+                  )
+                else
+                  ChartWeekly(weeklyData: weeklyData),
               ],
             ),
           ),

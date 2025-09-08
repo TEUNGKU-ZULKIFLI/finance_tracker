@@ -16,29 +16,39 @@ This project helps users record daily expenses/income, manage credit cards, view
 
 ## Project Structure
 
-- `lib/pages/` — Main app pages (input, card, chart, history, setting, home)
+- `lib/pages/` — Main app pages (input, card, chart, history, setting, home, main)
 - `lib/models/` — Data models (expense, income, balance, equity, credit card, history)
 - `lib/services/` — Database service (SQFlite) for all CRUD operations
 - `lib/widgets/` — Reusable widgets (snackbar, appbar, navbar, cards, charts)
 - `lib/utils/` — Utility functions (currency, chart sorting)
 - `lib/theme.dart` — Custom theme and color scheme
 
-## Development Log
+## Maintenance & Refactor Log (Pre-OS Reinstall)
 
-- **UI/UX**: Major refresh for all pages, unify colors, improve stepper input, and snackbar consistency.
-- **Database**: Switch from dev to production, stabilize tables, optimize queries.
-- **Features**: Add history table/model, credit card CRUD, input validation, equity calculation, export/delete all data.
-- **Internationalization**: All menus and texts switched to English.
-- **Assets**: Add bank logos, developer info, and update pubspec.
-- **Refactor**: Rename files/models for clarity, restructure widgets, optimize code.
-- **Chore**: Upgrade dependencies, fix build issues, support Android.
+- **Widget Refactor:**  
+  - Clean and unify all card & chart widgets (`card_balance`, `card_credits`, `chart_pie`, `chart_weekly`)
+  - Refactor main widgets (`appbar`, `navbar`, `snackbar`) for consistent style and theme usage
+- **Page Refactor:**  
+  - Clean and optimize all main pages (`home_page`, `chart_page`, `input_page`, `card_page`, `history_page`, `setting_page`)
+  - Add loading indicators, error handling, and mounted checks for async operations
+  - Improve navigation and state management for smooth UX
+- **Main Page Optimization:**  
+  - Refactor `main_page.dart` for animated transitions and responsive navigation
+  - Ensure all navigation and async calls are safe and efficient
+- **Bug Fixes & Best Practices:**  
+  - Fix setState after dispose errors with mounted checks
+  - Optimize async database queries and UI responsiveness
+  - Clean up unused code, improve naming, and add comments for maintainability
+- **Documentation:**  
+  - Update README with latest structure, features, and maintenance log
+  - Prepare for backup and future development after system reinstall
 
 ## Example Commit History
 
 - 💄 UI: Update snackbar for consistency
 - ✨ Feature: Add history, credit card CRUD, charts, settings
-- 🐛 Fix: Database, income model, build errors
-- ♻️ Refactor: Structure, naming, theme
+- 🐛 Fix: Database, income model, build errors, async setState
+- ♻️ Refactor: Structure, naming, theme, widget/page cleaning
 - 🔧 Chore: Upgrade Gradle, dependencies, Android config
 
 ## Next Steps
@@ -50,5 +60,5 @@ This project helps users record daily expenses/income, manage credit cards, view
 ---
 
 **Project status:**  
-All main features and UI/UX are implemented and stable.  
+All main features and UI/UX are implemented, refactored, and stable.  
 Ready for backup, documentation, and further development after system reinstall.

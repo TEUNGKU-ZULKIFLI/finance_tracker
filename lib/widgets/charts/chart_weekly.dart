@@ -9,6 +9,7 @@ class ChartWeekly extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final maxY = 3000000.0;
     final barWidth = 18.0;
     final minBarHeight = 10.0;
@@ -21,7 +22,7 @@ class ChartWeekly extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 32),
         child: loading
-            ? const SizedBox(
+            ? SizedBox(
                 height: 260,
                 child: Center(child: CircularProgressIndicator()),
               )
@@ -30,12 +31,11 @@ class ChartWeekly extends StatelessWidget {
                 children: [
                   Text(
                     'WEEKLY BAR CHART',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
-                        letterSpacing: 2,
-                      ),
+                    style: textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.primary,
+                      letterSpacing: 2,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
@@ -57,7 +57,9 @@ class ChartWeekly extends StatelessWidget {
                                     alignment: Alignment.centerRight,
                                     child: Text(
                                       y == 0 ? '' : '${y ~/ 1000}K',
-                                      style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                                      style: textTheme.bodySmall?.copyWith(
+                                        color: colorScheme.onSurfaceVariant,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -126,7 +128,9 @@ class ChartWeekly extends StatelessWidget {
                                   const SizedBox(height: 12),
                                   Text(
                                     'Week ${week['week'].toString().padLeft(2, '0')}',
-                                    style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface),
+                                    style: textTheme.bodySmall?.copyWith(
+                                      color: colorScheme.onSurface,
+                                    ),
                                   ),
                                 ],
                               );
@@ -141,13 +145,27 @@ class ChartWeekly extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(width: 18, height: 18, decoration: BoxDecoration(color: colorScheme.expense, borderRadius: BorderRadius.circular(4))),
+                      Container(
+                        width: 18,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          color: colorScheme.expense,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
                       const SizedBox(width: 6),
-                      Text('Expense', style: TextStyle(fontSize: 12)),
+                      Text('Expense', style: textTheme.bodySmall),
                       const SizedBox(width: 18),
-                      Container(width: 18, height: 18, decoration: BoxDecoration(color: colorScheme.income, borderRadius: BorderRadius.circular(4))),
+                      Container(
+                        width: 18,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          color: colorScheme.income,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
                       const SizedBox(width: 6),
-                      Text('Income', style: TextStyle(fontSize: 12)),
+                      Text('Income', style: textTheme.bodySmall),
                     ],
                   ),
                 ],

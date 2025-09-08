@@ -10,20 +10,31 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  OverlayEntry? _snackbarEntry;
-
   void _showCustomSnackbar(String message, SnackbarType type) {
-    _snackbarEntry?.remove();
-    _snackbarEntry = OverlayEntry(
-      builder: (ctx) => Positioned(
-        bottom: 80,
-        left: 0,
-        right: 0,
-        child: Snackbar(message: message, type: type),
+    final colorScheme = Theme.of(context).colorScheme;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              type == SnackbarType.success
+                  ? Icons.check_circle
+                  : Icons.error,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: Text(message)),
+          ],
+        ),
+        backgroundColor: type == SnackbarType.success
+            ? colorScheme.primary
+            : colorScheme.error,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        duration: const Duration(seconds: 3),
       ),
     );
-    Overlay.of(context).insert(_snackbarEntry!);
-    Future.delayed(const Duration(seconds: 3), () => _snackbarEntry?.remove());
   }
 
   @override
@@ -62,9 +73,7 @@ class _SettingPageState extends State<SettingPage> {
           _buildListTile(
             icon: Icons.picture_as_pdf,
             title: 'Export to PDF',
-            onTap: () {
-              // TODO: Implement export to PDF
-            },
+            onTap: () => _showCustomSnackbar('Export to PDF not implemented yet.', SnackbarType.info),
           ),
           const Divider(),
           _buildListTile(
@@ -89,9 +98,7 @@ class _SettingPageState extends State<SettingPage> {
           _buildListTile(
             icon: Icons.school,
             title: 'Learning Tutorials',
-            onTap: () {
-              // TODO: Open tutorial page/link
-            },
+            onTap: () => _showCustomSnackbar('Tutorial page not implemented yet.', SnackbarType.info),
           ),
           const Divider(),
         ],
@@ -105,8 +112,9 @@ class _SettingPageState extends State<SettingPage> {
     Color? iconColor,
     VoidCallback? onTap,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return ListTile(
-      leading: Icon(icon, color: iconColor),
+      leading: Icon(icon, color: iconColor ?? colorScheme.primary),
       title: Text(title ?? ''),
       onTap: onTap,
     );
@@ -208,21 +216,6 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  // const SizedBox(height: 16),
-                  // _DevLinkTile(
-                  //   asset: 'assets/dev/github.ico',
-                  //   label: 'GitHub',
-                  //   url: 'https://github.com/TEUNGKU-ZULKIFLI',
-                  //   subtitle: 'github.com/TEUNGKU-ZULKIFLI',
-                  //   color: colorScheme.primary,
-                  // ),
-                  // _DevLinkTile(
-                  //   asset: 'assets/dev/linked.ico',
-                  //   label: 'LinkedIn',
-                  //   url: 'https://www.linkedin.com/in/teungku-zulkifli08/',
-                  //   subtitle: 'in/teungku-zulkifli',
-                  //   color: colorScheme.secondary,
-                  // ),
                 ],
               ),
               actionsAlignment: MainAxisAlignment.center,

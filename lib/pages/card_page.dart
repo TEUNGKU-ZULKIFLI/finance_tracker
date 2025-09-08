@@ -26,20 +26,29 @@ class _CardPageState extends State<CardPage> {
     'Bank_Tabungan_Negara_Syariah.png',
   ];
 
-  OverlayEntry? _snackbarEntry;
-
   void _showCustomSnackbar(String message, SnackbarType type) {
-    _snackbarEntry?.remove();
-    _snackbarEntry = OverlayEntry(
-      builder: (ctx) => Positioned(
-        bottom: 80,
-        left: 0,
-        right: 0,
-        child: Snackbar(message: message, type: type),
+    final colorScheme = Theme.of(context).colorScheme;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              type == SnackbarType.success ? Icons.check_circle : Icons.error,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: Text(message)),
+          ],
+        ),
+        backgroundColor: type == SnackbarType.success
+            ? colorScheme.primary
+            : colorScheme.error,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        duration: const Duration(seconds: 3),
       ),
     );
-    Overlay.of(context).insert(_snackbarEntry!);
-    Future.delayed(const Duration(seconds: 3), () => _snackbarEntry?.remove());
   }
 
   @override

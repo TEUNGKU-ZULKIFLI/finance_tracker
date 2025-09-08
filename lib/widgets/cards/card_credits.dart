@@ -22,6 +22,7 @@ class CardCredits extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
       elevation: 6,
@@ -49,10 +50,7 @@ class CardCredits extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
         ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 28,
-        ), // Tambah padding vertikal
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -61,18 +59,16 @@ class CardCredits extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16), // Lebih bulat
+                    borderRadius: BorderRadius.circular(16),
                     // ignore: deprecated_member_use
-                    color: colorScheme.backimg.withOpacity(
-                      0.85,
-                    ),
+                    color: colorScheme.backimg.withOpacity(0.85),
                   ),
-                  padding: const EdgeInsets.all(10), // Lebih besar
+                  padding: const EdgeInsets.all(10),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: Image.asset(
                       logoAsset,
-                      width: 64, // Logo lebih besar
+                      width: 64,
                       height: 64,
                       fit: BoxFit.contain,
                     ),
@@ -114,10 +110,10 @@ class CardCredits extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 18), // Spasi lebih proporsional
+            const SizedBox(height: 18),
             Text(
               namaRek,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              style: textTheme.titleLarge?.copyWith(
                 color: colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: 22,
@@ -128,7 +124,7 @@ class CardCredits extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               noRek,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              style: textTheme.titleMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
@@ -150,7 +146,7 @@ class CardCredits extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   'Active',
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  style: textTheme.labelLarge?.copyWith(
                     color: colorScheme.primary,
                     fontWeight: FontWeight.w600,
                   ),

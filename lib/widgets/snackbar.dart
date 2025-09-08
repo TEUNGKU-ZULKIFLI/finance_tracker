@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+enum SnackbarType {
+  info,
+  success,
+  error,
+}
+
 class Snackbar extends StatelessWidget {
   final String message;
   final SnackbarType type;
@@ -38,6 +44,17 @@ class Snackbar extends StatelessWidget {
     }
   }
 
+  IconData _getIcon() {
+    switch (type) {
+      case SnackbarType.success:
+        return Icons.check_circle;
+      case SnackbarType.error:
+        return Icons.error;
+      case SnackbarType.info:
+        return Icons.info;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -70,6 +87,12 @@ class Snackbar extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Icon(
+              _getIcon(),
+              color: _getTextColor(context),
+              size: 22,
+            ),
+            const SizedBox(width: 10),
             Expanded(
               child: Text(
                 message,
@@ -95,10 +118,4 @@ class Snackbar extends StatelessWidget {
       ),
     );
   }
-}
-
-enum SnackbarType {
-  info,
-  success,
-  error,
 }

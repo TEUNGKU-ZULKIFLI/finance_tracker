@@ -43,7 +43,10 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Appbar(),
-      body: _pages[_currentIndex],
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 250),
+        child: _pages[_currentIndex],
+      ),
       bottomNavigationBar: NavigationBar(
         currentIndex: _currentIndex,
         onTap: _onItemTapped,

@@ -14,20 +14,32 @@ class _HistoryPageState extends State<HistoryPage> {
   List<UserHistoryModel> historyList = [];
   String sortBy = 'timestamp'; // default sort by date
   bool desc = true; // default descending
-  OverlayEntry? _snackbarEntry;
 
   void _showCustomSnackbar(String message, SnackbarType type) {
-    _snackbarEntry?.remove();
-    _snackbarEntry = OverlayEntry(
-      builder: (ctx) => Positioned(
-        bottom: 80,
-        left: 0,
-        right: 0,
-        child: Snackbar(message: message, type: type),
+    final colorScheme = Theme.of(context).colorScheme;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              type == SnackbarType.success
+                  ? Icons.check_circle
+                  : Icons.error,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: Text(message)),
+          ],
+        ),
+        backgroundColor: type == SnackbarType.success
+            ? colorScheme.primary
+            : colorScheme.error,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        duration: const Duration(seconds: 3),
       ),
     );
-    Overlay.of(context).insert(_snackbarEntry!);
-    Future.delayed(const Duration(seconds: 3), () => _snackbarEntry?.remove());
   }
 
   @override
@@ -50,14 +62,19 @@ class _HistoryPageState extends State<HistoryPage> {
       builder: (context) => AlertDialog(
         title: const Text('Delete All History?'),
         content: const Text('History data will be permanently deleted.'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         actions: [
           TextButton(
             child: const Text('Cancel'),
             onPressed: () => Navigator.pop(context, false),
           ),
           ElevatedButton(
-            child: const Text('Delete'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Colors.white,
+            ),
             onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
           ),
         ],
       ),
@@ -83,6 +100,7 @@ class _HistoryPageState extends State<HistoryPage> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       body: Column(
         children: [
           const SizedBox(height: 24),

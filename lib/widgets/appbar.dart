@@ -12,26 +12,8 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: colorScheme.primary,
       foregroundColor: colorScheme.onPrimary,
       elevation: 0,
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              // ignore: deprecated_member_use
-              color: colorScheme.primary.withOpacity(0.18),
-              blurRadius: 32,
-              spreadRadius: 2,
-              offset: const Offset(0, 8),
-            ),
-            BoxShadow(
-              // ignore: deprecated_member_use
-              color: colorScheme.primary.withOpacity(0.08),
-              blurRadius: 8,
-              spreadRadius: 1,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-      ),
+      // ignore: deprecated_member_use
+      shadowColor: colorScheme.primary.withOpacity(0.18),
       title: Text(
         'APOK FINTRACK',
         style: textTheme.titleLarge?.copyWith(
@@ -44,6 +26,7 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           icon: Icon(Icons.settings, color: colorScheme.onPrimary),
+          tooltip: 'Settings',
           onPressed: () {
             Navigator.push(
               context,
@@ -52,6 +35,11 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
       ],
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(18),
+        ),
+      ),
     );
   }
 
