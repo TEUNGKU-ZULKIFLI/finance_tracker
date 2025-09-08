@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finance_tracker/widgets/snackbar.dart';
 import 'package:finance_tracker/widgets/cards/card_credits.dart';
 import 'package:finance_tracker/models/credit_card_model.dart';
 import 'package:finance_tracker/services/db_service.dart';
@@ -24,6 +25,22 @@ class _CardPageState extends State<CardPage> {
     'Bank_Tabungan_Negara.png',
     'Bank_Tabungan_Negara_Syariah.png',
   ];
+
+  OverlayEntry? _snackbarEntry;
+
+  void _showCustomSnackbar(String message, SnackbarType type) {
+    _snackbarEntry?.remove();
+    _snackbarEntry = OverlayEntry(
+      builder: (ctx) => Positioned(
+        bottom: 80,
+        left: 0,
+        right: 0,
+        child: Snackbar(message: message, type: type),
+      ),
+    );
+    Overlay.of(context).insert(_snackbarEntry!);
+    Future.delayed(const Duration(seconds: 3), () => _snackbarEntry?.remove());
+  }
 
   @override
   void initState() {
@@ -167,12 +184,9 @@ class _CardPageState extends State<CardPage> {
                                 'Card "${card.namaRek}" successfully created',
                                 DateTime.now().toIso8601String(),
                               );
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Card successfully added!'),
-                                  backgroundColor: colorScheme.primary,
-                                ),
+                              _showCustomSnackbar(
+                                'Card successfully added!',
+                                SnackbarType.success,
                               );
                               // ignore: use_build_context_synchronously
                               Navigator.pop(context);
@@ -332,12 +346,9 @@ class _CardPageState extends State<CardPage> {
                                 'Card "${updatedCard.namaRek}" successfully updated',
                                 DateTime.now().toIso8601String(),
                               );
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Card successfully updated!'),
-                                  backgroundColor: colorScheme.primary,
-                                ),
+                              _showCustomSnackbar(
+                                'Card successfully updated!',
+                                SnackbarType.success,
                               );
                               // ignore: use_build_context_synchronously
                               Navigator.pop(context);
@@ -369,14 +380,7 @@ class _CardPageState extends State<CardPage> {
       'Card "${card.namaRek}" successfully deleted',
       DateTime.now().toIso8601String(),
     );
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Card successfully deleted!'),
-        // ignore: use_build_context_synchronously
-        backgroundColor: Theme.of(context).colorScheme.error,
-      ),
-    );
+    _showCustomSnackbar('Card successfully deleted!', SnackbarType.success);
     _loadCards();
   }
 

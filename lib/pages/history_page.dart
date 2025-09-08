@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:finance_tracker/services/db_service.dart';
+import 'package:finance_tracker/widgets/snackbar.dart';
 import 'package:finance_tracker/models/user_history_model.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -13,6 +14,21 @@ class _HistoryPageState extends State<HistoryPage> {
   List<UserHistoryModel> historyList = [];
   String sortBy = 'timestamp'; // default sort by date
   bool desc = true; // default descending
+  OverlayEntry? _snackbarEntry;
+
+  void _showCustomSnackbar(String message, SnackbarType type) {
+    _snackbarEntry?.remove();
+    _snackbarEntry = OverlayEntry(
+      builder: (ctx) => Positioned(
+        bottom: 80,
+        left: 0,
+        right: 0,
+        child: Snackbar(message: message, type: type),
+      ),
+    );
+    Overlay.of(context).insert(_snackbarEntry!);
+    Future.delayed(const Duration(seconds: 3), () => _snackbarEntry?.remove());
+  }
 
   @override
   void initState() {
@@ -47,13 +63,17 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
     );
     if (confirm == true) {
-      await DbService().clearHistory();
-      _loadHistory();
-      if (context.mounted) {
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('History successfully deleted')),
-        );
+      try {
+        await DbService().clearHistory();
+        _loadHistory();
+        if (context.mounted) {
+          _showCustomSnackbar(
+            'History successfully deleted',
+            SnackbarType.success,
+          );
+        }
+      } catch (e) {
+        _showCustomSnackbar('Delete history failed: $e', SnackbarType.error);
       }
     }
   }

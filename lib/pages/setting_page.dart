@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finance_tracker/widgets/snackbar.dart';
 import 'package:finance_tracker/services/db_service.dart';
 
 class SettingPage extends StatefulWidget {
@@ -9,6 +10,22 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  OverlayEntry? _snackbarEntry;
+
+  void _showCustomSnackbar(String message, SnackbarType type) {
+    _snackbarEntry?.remove();
+    _snackbarEntry = OverlayEntry(
+      builder: (ctx) => Positioned(
+        bottom: 80,
+        left: 0,
+        right: 0,
+        child: Snackbar(message: message, type: type),
+      ),
+    );
+    Overlay.of(context).insert(_snackbarEntry!);
+    Future.delayed(const Duration(seconds: 3), () => _snackbarEntry?.remove());
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -50,12 +67,12 @@ class _SettingPageState extends State<SettingPage> {
             },
           ),
           const Divider(),
-_buildListTile(
-  icon: Icons.warning,
-  iconColor: Colors.orange,
-  title: 'Delete All Data Input',
-  onTap: () => _confirmDeleteAll(context),
-),
+          _buildListTile(
+            icon: Icons.warning,
+            iconColor: Colors.orange,
+            title: 'Delete All Data Input',
+            onTap: () => _confirmDeleteAll(context),
+          ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.info_outline),
@@ -103,12 +120,14 @@ _buildListTile(
       transitionDuration: const Duration(milliseconds: 260),
       pageBuilder: (context, anim1, anim2) => const SizedBox.shrink(),
       transitionBuilder: (context, anim1, anim2, child) {
-        final scale = Tween<double>(begin: 0.92, end: 1.0).animate(
-          CurvedAnimation(parent: anim1, curve: Curves.easeOutBack),
-        );
-        final fade = Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(parent: anim1, curve: Curves.easeOut),
-        );
+        final scale = Tween<double>(
+          begin: 0.92,
+          end: 1.0,
+        ).animate(CurvedAnimation(parent: anim1, curve: Curves.easeOutBack));
+        final fade = Tween<double>(
+          begin: 0.0,
+          end: 1.0,
+        ).animate(CurvedAnimation(parent: anim1, curve: Curves.easeOut));
         return Transform.scale(
           scale: scale.value,
           child: Opacity(
@@ -131,10 +150,7 @@ _buildListTile(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
-                        colors: [
-                          colorScheme.primary,
-                          colorScheme.secondary,
-                        ],
+                        colors: [colorScheme.primary, colorScheme.secondary],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -231,36 +247,42 @@ _buildListTile(
   }
 
   Future<void> _confirmDeleteAll(BuildContext context) async {
-  final colorScheme = Theme.of(context).colorScheme;
-  final result = await showDialog<bool>(
-    context: context,
-    builder: (ctx) => AlertDialog(
-      title: const Text('Delete All Data'),
-      content: const Text('Are you sure you want to delete all input data? This action cannot be undone.'),
-      actions: [
-        TextButton(
-          child: Text('Cancel', style: TextStyle(color: colorScheme.secondary)),
-          onPressed: () => Navigator.of(ctx).pop(false),
+    final colorScheme = Theme.of(context).colorScheme;
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete All Data'),
+        content: const Text(
+          'Are you sure you want to delete all input data? This action cannot be undone.',
         ),
-        TextButton(
-          child: Text('Delete', style: TextStyle(color: colorScheme.error)),
-          onPressed: () => Navigator.of(ctx).pop(true),
-        ),
-      ],
-    ),
-  );
-  if (result == true) {
-    await DbService.clearAll();
+        actions: [
+          TextButton(
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: colorScheme.secondary),
+            ),
+            onPressed: () => Navigator.of(ctx).pop(false),
+          ),
+          TextButton(
+            child: Text('Delete', style: TextStyle(color: colorScheme.error)),
+            onPressed: () => Navigator.of(ctx).pop(true),
+          ),
+        ],
+      ),
+    );
+    if (result == true) {
+      await DbService.clearAll();
       await DbService().insertHistory(
-    'DELETE_INPUT',
-    'All input data deleted',
-    DateTime.now().toIso8601String(),
-  );
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('All input data deleted successfully!')),
+        'DELETE_INPUT',
+        'All input data deleted',
+        DateTime.now().toIso8601String(),
       );
+      if (context.mounted) {
+        _showCustomSnackbar(
+          'All input data deleted successfully!',
+          SnackbarType.success,
+        );
+      }
     }
   }
-}
 }

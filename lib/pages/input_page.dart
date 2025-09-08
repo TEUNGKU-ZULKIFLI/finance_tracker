@@ -376,12 +376,7 @@ TextField(
     final dateStr = _dateController.text;
     if (dateStr.isEmpty) {
       setState(() => _errorMsg = 'Date is required');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Date is required'),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
+      _showCustomSnackbar('Date is required', SnackbarType.error);
       return;
     }
     // Validasi minimal satu field expense/income terisi
@@ -398,14 +393,7 @@ TextField(
         () =>
             _errorMsg = 'At least one expense or income field must be filled',
       );
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text(
-            'At least one expense or income field must be filled',
-          ),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
+      _showCustomSnackbar(_errorMsg!, SnackbarType.error);
       return;
     }
     try {
