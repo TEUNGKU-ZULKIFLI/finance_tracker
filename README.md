@@ -25,40 +25,36 @@ This project helps users record daily expenses/income, manage credit cards, view
 
 ## Maintenance & Refactor Log (Pre-OS Reinstall)
 
-- **Widget Refactor:**  
-  - Clean and unify all card & chart widgets (`card_balance`, `card_credits`, `chart_pie`, `chart_weekly`)
-  - Refactor main widgets (`appbar`, `navbar`, `snackbar`) for consistent style and theme usage
-- **Page Refactor:**  
-  - Clean and optimize all main pages (`home_page`, `chart_page`, `input_page`, `card_page`, `history_page`, `setting_page`)
-  - Add loading indicators, error handling, and mounted checks for async operations
-  - Improve navigation and state management for smooth UX
-- **Main Page Optimization:**  
-  - Refactor `main_page.dart` for animated transitions and responsive navigation
-  - Ensure all navigation and async calls are safe and efficient
-- **Bug Fixes & Best Practices:**  
-  - Fix setState after dispose errors with mounted checks
-  - Optimize async database queries and UI responsiveness
-  - Clean up unused code, improve naming, and add comments for maintainability
-- **Documentation:**  
-  - Update README with latest structure, features, and maintenance log
-  - Prepare for backup and future development after system reinstall
+- **Widget Refactor:** Clean and unify card & chart widgets, main widgets (appbar, navbar, snackbar).
+- **Page Refactor:** Optimize all pages, improve navigation & async handling.
+- **Main Page:** Animated transitions, responsive navigation.
+- **Bug Fixes:** Mounted checks, async DB query optimizations.
+- **Docs:** Updated README, structured commits, prepared for backup.
 
 ## Example Commit History
 
-- 💄 UI: Update snackbar for consistency
-- ✨ Feature: Add history, credit card CRUD, charts, settings
-- 🐛 Fix: Database, income model, build errors, async setState
-- ♻️ Refactor: Structure, naming, theme, widget/page cleaning
-- 🔧 Chore: Upgrade Gradle, dependencies, Android config
+- 💄 UI: Update snackbar for consistency  
+- ✨ Feature: Add history, credit card CRUD, charts, settings  
+- 🐛 Fix: Database, income model, build errors, async setState  
+- ♻️ Refactor: Structure, naming, theme, widget/page cleaning  
+- 🔧 Chore: Upgrade Gradle, dependencies, Android config  
 
 ## Next Steps
 
-- Finalize export to PDF
-- Polish custom snackbar or switch fully to Flutter's native snackbar with theme colors
-- Document code and usage for future development
+- Finalize export to PDF  
+- Polish snackbar (default theme colors)  
+- Document code for future contributors  
 
 ---
 
-**Project status:**  
+## 📦 Project Status
 All main features and UI/UX are implemented, refactored, and stable.  
-Ready for backup, documentation, and further development after system reinstall.
+**Version: `1.0.0+1` — First stable release with APK & AAB build ready.**  
+
+---
+
+## 💖 Support & Sponsor
+
+Jika kamu merasa project ini bermanfaat, kamu bisa mendukungku di GitHub Sponsors:  
+
+[![Sponsor](https://img.shields.io/badge/Sponsor-TEUNGKU--ZULKIFLI-pink?logo=github-sponsors&style=for-the-badge)](https://github.com/sponsors/TEUNGKU-ZULKIFLI)
